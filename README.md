@@ -107,12 +107,13 @@ mikrobank/
 
 ## 🧪 Unit Tests
 
-Das Projekt enthält über **40 umfangreiche Unit Tests**, die die gesamte Geschäftslogik validieren:
+Das Projekt enthält über **70 umfangreiche Unit Tests**, die die gesamte Geschäftslogik validieren:
 
-- ✅ **KontoServiceTest** (11 Tests) - Einzahlungen und Auszahlungen
-- ✅ **PreisServiceTest** (8 Tests) - Preisermittlung
+- ✅ **KontoServiceTest** (15 Tests) - Einzahlungen und Auszahlungen
+- ✅ **PreisServiceTest** (7 Tests) - Preisermittlung
 - ✅ **OrderValidierungsServiceTest** (14 Tests) - Validierung von Kauf/Verkauf
-- ✅ **BoerseServiceTest** (18 Tests) - Kompletter Kaufprozess
+- ✅ **BoerseServiceTest** (22 Tests) - Kompletter Kauf- und Verkaufsprozess
+- ✅ **HandelsRoboterTest** (19 Tests) - Automatisiertes Handelssystem
 
 ### Tests ausführen
 

@@ -13,12 +13,20 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Unit Tests für den BoerseService.
  * 
- * Diese Tests prüfen den kompletten Aktienkauf-Prozess.
- * Der Kauf ist erfolgreich, wenn:
+ * Diese Tests prüfen den kompletten Aktienkauf- und Verkaufsprozess.
+ * 
+ * **Kauf** ist erfolgreich, wenn:
  * 1. Die Order gültig ist
  * 2. Der Preis ermittelt wird
  * 3. Genug Guthaben vorhanden ist
  * 4. Das Geld vom Konto abgebucht wird
+ * 5. Der Kurs im KursService gespeichert wird
+ * 
+ * **Verkauf** ist erfolgreich, wenn:
+ * 1. Die Order gültig ist
+ * 2. Der Preis ermittelt wird
+ * 3. Der Erlös auf das Konto eingezahlt wird
+ * 4. Der Kurs im KursService gespeichert wird
  */
 @DisplayName("BoerseService Tests")
 class BoerseServiceTest {
@@ -221,5 +229,137 @@ class BoerseServiceTest {
         // Act & Assert
         assertDoesNotThrow(() -> boerseService.kaufe(konto, aktie, menge),
             "Der Kauf teurer Aktien sollte möglich sein");
+    }
+
+    // ============ ERFOLGREICHE VERKÄUFE ============
+
+    @Test
+    @DisplayName("Verkauf: Einfacher erfolgreicher Verkauf")
+    void verkauferfolgreicherVerkauf() {
+        // Arrange
+        Konto konto = new Konto(5000);
+        Aktie aktie = new Aktie("Apple", 100);  // 100 Euro pro Aktie
+        int menge = 10;  // Verkaufe 10 Aktien = 1000 Euro Erlös
+        
+        // Act
+        // Der Verkauf sollte ohne Exception erfolgreich sein
+        assertDoesNotThrow(() -> boerseService.verkaufe(konto, aktie, menge),
+            "Ein gültiger Verkauf sollte erfolgreich sein");
+    }
+
+    @Test
+    @DisplayName("Verkauf: Guthaben wird erhöht")
+    void verkaufguthaben_wird_erhoeht() {
+        // Arrange
+        Konto konto = new Konto(1000);
+        Aktie aktie = new Aktie("SAP", 100);
+        int menge = 5;  // 5 Aktien * 100 Euro = 500 Euro Erlös
+
+        double guthabenVorher = konto.getKontostand();
+        
+        // Act
+        boerseService.verkaufe(konto, aktie, menge);
+        
+        // Assert
+        assertTrue(konto.getKontostand() > guthabenVorher,
+            "Das Guthaben sollte nach dem Verkauf erhöht sein");
+    }
+
+    @Test
+    @DisplayName("Verkauf: Eine Aktie verkaufen")
+    void verkaufeineAktie() {
+        // Arrange
+        Konto konto = new Konto(500);
+        Aktie aktie = new Aktie("Tesla", 100);
+        int menge = 1;
+        
+        // Act & Assert
+        assertDoesNotThrow(() -> boerseService.verkaufe(konto, aktie, menge),
+            "Der Verkauf einer einzelnen Aktie sollte erfolgreich sein");
+    }
+
+    @Test
+    @DisplayName("Verkauf: Viele Aktien verkaufen")
+    void verkaufvielAktien() {
+        // Arrange
+        Konto konto = new Konto(1000);
+        Aktie aktie = new Aktie("Google", 100);
+        int menge = 500;  // 500 Aktien = 50.000 Euro Erlös
+        
+        // Act & Assert
+        assertDoesNotThrow(() -> boerseService.verkaufe(konto, aktie, menge),
+            "Der Verkauf vieler Aktien sollte möglich sein");
+    }
+
+    @Test
+    @DisplayName("Verkauf: Teure Aktie, kleine Menge")
+    void verkaufteureAktie() {
+        // Arrange
+        Konto konto = new Konto(100);
+        Aktie aktie = new Aktie("Luxury", 1000);  // 1000 Euro pro Aktie
+        int menge = 3;  // 3 Aktien = 3000 Euro Erlös
+        
+        // Act & Assert
+        assertDoesNotThrow(() -> boerseService.verkaufe(konto, aktie, menge),
+            "Der Verkauf teurer Aktien sollte möglich sein");
+    }
+
+    // ============ FEHLGESCHLAGENE VERKÄUFE - UNGÜLTIGE ORDNUNG ============
+
+    @Test
+    @DisplayName("Verkauf: Ungültig - null Aktie")
+    void verkaufmitNullAktie_wirftException() {
+        // Arrange
+        Konto konto = new Konto(1000);
+        Aktie aktie = null;
+        int menge = 5;
+        
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class,
+                () -> boerseService.verkaufe(konto, aktie, menge),
+            "Ein Verkauf ohne Aktie sollte abgelehnt werden");
+    }
+
+    @Test
+    @DisplayName("Verkauf: Ungültig - Menge 0")
+    void verkaufmitMengeNull_wirftException() {
+        // Arrange
+        Konto konto = new Konto(1000);
+        Aktie aktie = new Aktie("Apple", 100);
+        int menge = 0;
+        
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class,
+                () -> boerseService.verkaufe(konto, aktie, menge),
+            "Ein Verkauf mit Menge 0 sollte abgelehnt werden");
+    }
+
+    @Test
+    @DisplayName("Verkauf: Ungültig - Negative Menge")
+    void verkaufmitNegativerMenge_wirftException() {
+        // Arrange
+        Konto konto = new Konto(1000);
+        Aktie aktie = new Aktie("SAP", 100);
+        int menge = -5;
+        
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class,
+                () -> boerseService.verkaufe(konto, aktie, menge),
+            "Ein Verkauf mit negativer Menge sollte abgelehnt werden");
+    }
+
+    // ============ GRENZFÄLLE VERKAUF ============
+
+    @Test
+    @DisplayName("Verkauf: Sehr kleine Aktie, sehr kleine Menge")
+    void verkaufsehrKleineAktie() {
+        // Arrange
+        Konto konto = new Konto(100);
+        Aktie aktie = new Aktie("Penny", 1);  // 1 Euro pro Aktie
+        int menge = 5;  // 5 Euro Erlös
+        
+        // Act & Assert
+        assertDoesNotThrow(() -> boerseService.verkaufe(konto, aktie, menge),
+            "Der Verkauf von günstigen Aktien sollte möglich sein");
     }
 }
