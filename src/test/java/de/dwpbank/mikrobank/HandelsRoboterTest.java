@@ -2,7 +2,6 @@ package de.dwpbank.mikrobank;
 
 import de.dwpbank.mikrobank.model.Aktie;
 import de.dwpbank.mikrobank.model.Konto;
-import de.dwpbank.mikrobank.service.HandelsRoboter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
