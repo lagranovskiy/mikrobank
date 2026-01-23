@@ -1,7 +1,6 @@
 package de.dwpbank.mikrobank;
 
 import de.dwpbank.mikrobank.model.Aktie;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
@@ -19,62 +18,52 @@ import java.util.Scanner;
  *
  * VERWENDUNG:
  * ```
- * mvn exec:java -Dexec.mainClass="de.dwpbank.mikrobank.Boersensimulator"
+ * mvn clean compile exec:java -Dexec.mainClass="de.dwpbank.mikrobank.Boersensimulator"
  * ```
  *
  * Die Simulation läuft kontinuierlich:
  * - Jede "Runde" repräsentiert einen Handelsmoment
  * - Aktienkurse ändern sich zufällig (realistisch)
- * - Der Roboter macht Kauf-/Verkaufsentscheidungen
- * - Geben Sie "q" ein, um zu beenden
- *
- * AUSGABE:
- * - Zeitstempel: Wann der Handel stattfand
- * - Aktienkurse: Aktuelle Preise am Markt
- * - Roboter-Aktionen: Was der Roboter kauft/verkauft
- * - Status: Guthaben, Depot, Vermögen
+ * - Der Roboter macht automatisch Kauf-/Verkaufsentscheidungen
+ * - Drücken Sie Enter nach jeder Runde, um fortzufahren
+ * - Geben Sie "q" ein und Enter zum Beenden
  *
  * @author Praktikant
  * @version 1.0
  */
-@Slf4j
 public class Boersensimulator {
 
-    private static final int SIMULATION_DELAY_MS = 3000; // 3 Sekunden zwischen Runden
     private static final double PREIS_SCHWANKUNG_PROZENT = 5.0; // ±5% Kursschwankung
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(Boersensimulator.class);
 
     private HandelsRoboter roboter;
     private List<Aktie> aktien;
     private Random random;
     private int rundenZaehler;
-    
-    // Logger für diese Klasse (wird verwendet wenn @Slf4j nicht verfügbar)
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Boersensimulator.class);
 
-    /**
-     * Haupteinstiegspunkt der Simulation
-     */
     public static void main(String[] args) {
-        Boersensimulator simulator = new Boersensimulator();
-        simulator.run();
+        new Boersensimulator().run();
+    }
+
+    private void run() {
+        setup();
+        simuliere();
     }
 
     /**
-     * Initialisiert die Simulation
+     * Initialisiert die Simulation: Roboter und Aktien erstellen
      */
     private void setup() {
-        log.info("═══════════════════════════════════════════════════════════════");
-        log.info("     BÖRSEN-SIMULATOR: Integratives Demo-System");
-        log.info("═══════════════════════════════════════════════════════════════");
-        log.info("");
+        logger.info("═══════════════════════════════════════════════════════════════");
+        logger.info("     BÖRSEN-SIMULATOR: Integratives Demo-System");
+        logger.info("═══════════════════════════════════════════════════════════════");
+        logger.info("");
 
-        // Erstelle den Roboter mit 50.000€ Startkapital
         this.roboter = new HandelsRoboter("MegaTrader3000", 50000);
         this.random = new Random();
         this.rundenZaehler = 0;
 
-        // Erstelle Aktien mit Startkursen
         this.aktien = new ArrayList<>();
         aktien.add(new Aktie("Apple", 150.00));
         aktien.add(new Aktie("BMW", 85.50));
@@ -86,134 +75,100 @@ public class Boersensimulator {
         logger.info("✅ {} Aktien hinzugefügt", aktien.size());
         logger.info("✅ Startkapital: 50.000€");
         logger.info("");
-        logger.info("Starten Sie die Simulation mit Enter...");
-        logger.info("Zum Beenden geben Sie 'q' ein und drücken Enter.");
-        logger.info("");
-
-        // Warte auf Benutzer-Input zum Starten
-        Scanner scanner = new Scanner(System.in);
-        scanner.nextLine();
-        logger.info("");
-        logger.info("▶ SIMULATION GESTARTET!");
-        logger.info("");
     }
 
     /**
-     * Hauptschleife der Simulation
+     * Führt die Handelssimulation durch
      */
-    private void run() {
-        setup();
-
+    private void simuliere() {
         Scanner scanner = new Scanner(System.in);
-        Thread inputThread = new Thread(() -> {
-            while (true) {
-                String input = scanner.nextLine();
-                if (input.equalsIgnoreCase("q")) {
-                    logger.info("");
-                    logger.info("⏹ Simulation wird beendet...");
-                    System.exit(0);
-                }
-            }
-        });
-        inputThread.setDaemon(true);
-        inputThread.start();
 
-        // Hauptschleife
+        logger.info("▶ SIMULATION GESTARTET!");
+        logger.info("Drücken Sie Enter nach jeder Runde zum Fortfahren.");
+        logger.info("Geben Sie 'q' ein und Enter zum Beenden.");
+        logger.info("");
+
         while (true) {
             rundenZaehler++;
 
             try {
-                // ──────────────────────────────────────────
-                // SCHRITT 1: Simuliere Kursschwankungen
-                // ──────────────────────────────────────────
+                // SCHRITT 1: Kurse ändern
                 simulierKursschwankungen();
 
-                // ──────────────────────────────────────────
-                // SCHRITT 2: Zeige aktuelle Kurse
-                // ──────────────────────────────────────────
+                // SCHRITT 2: Zeige Kurse
                 zeigeAktuelleKurse();
 
-                // ──────────────────────────────────────────
                 // SCHRITT 3: Roboter handelt
-                // ──────────────────────────────────────────
                 logger.info("");
                 logger.info("🤖 HANDEL-RUNDE {}:", rundenZaehler);
                 roboter.handeleSession(aktien);
 
-                // ──────────────────────────────────────────
-                // SCHRITT 4: Zeige Roboter-Status
-                // ──────────────────────────────────────────
+                // SCHRITT 4: Status anzeigen
                 logger.info("");
                 logger.info(roboter.gibStatus());
 
-                // ──────────────────────────────────────────
-                // SCHRITT 5: Warte vor nächster Runde
-                // ──────────────────────────────────────────
+                // SCHRITT 5: Warte auf Benutzer-Input
                 logger.info("");
-                logger.info("⏳ Nächste Runde in {} Sekunden... (q + Enter zum Beenden)",
-                        SIMULATION_DELAY_MS / 1000);
                 logger.info("═══════════════════════════════════════════════════════════════");
+                logger.info("Drücken Sie Enter für nächste Runde (oder 'q' zum Beenden):");
+
+                String input = scanner.nextLine();
+                if (input.equalsIgnoreCase("q")) {
+                    logger.info("");
+                    logger.info("⏹ Simulation beendet.");
+                    logger.info("");
+                    zeigeFinaleStatistiken();
+                    break;
+                }
+
                 logger.info("");
 
-                Thread.sleep(SIMULATION_DELAY_MS);
-
-            } catch (InterruptedException e) {
-                logger.error("Simulation unterbrochen: {}", e.getMessage());
-                break;
             } catch (Exception e) {
-                logger.error("Fehler in Simulation: {}", e.getMessage(), e);
-                Thread.yield();
+                logger.error("Fehler in Runde {}: {}", rundenZaehler, e.getMessage());
             }
         }
+
+        scanner.close();
     }
 
     /**
-     * Simuliert realistische Kursschwankungen
-     * Die Kurse ändern sich um ±5% basierend auf Zufälligkeit
+     * Ändert die Aktienkurse um ±5%
      */
     private void simulierKursschwankungen() {
         for (Aktie aktie : aktien) {
             double alterPreis = aktie.getPreis();
-            double schwankung = (random.nextDouble() - 0.5) * 2; // -1.0 bis 1.0
-            double prozentChange = (PREIS_SCHWANKUNG_PROZENT / 100) * schwankung; // ±5%
-            double neuerPreis = alterPreis * (1 + prozentChange);
-
-            // Preis sollte nicht negativ werden
-            neuerPreis = Math.max(neuerPreis, 0.01);
-
-            aktie.setPreis(neuerPreis);
+            double schwankung = (random.nextDouble() - 0.5) * 2;
+            double neuerPreis = alterPreis * (1 + (PREIS_SCHWANKUNG_PROZENT / 100) * schwankung);
+            aktie.setPreis(Math.max(neuerPreis, 0.01));
         }
     }
 
     /**
-     * Zeigt die aktuellen Aktienkurse in einer Tabelle
+     * Zeigt die aktuellen Kurse in einer Tabelle
      */
     private void zeigeAktuelleKurse() {
-        String zeitstempel = LocalDateTime.now().format(FORMATTER);
+        String zeit = LocalDateTime.now().format(FORMATTER);
 
         logger.info("");
-        logger.info("📊 AKTUELLE KURSE - {}", zeitstempel);
+        logger.info("📊 AKTUELLE KURSE - {}", zeit);
         logger.info("┌──────────────────┬──────────┬──────────────┐");
         logger.info("│ Aktie            │ Preis    │ Trend        │");
         logger.info("├──────────────────┼──────────┼──────────────┤");
 
         for (Aktie aktie : aktien) {
-            String trend = getTrendIcon(aktie.getPreis());
             logger.info("│ {:<16} │ €{:>7.2f} │ {:<12} │",
                     aktie.getName(),
                     aktie.getPreis(),
-                    trend);
+                    getTrendIcon());
         }
 
         logger.info("└──────────────────┴──────────┴──────────────┘");
     }
 
     /**
-     * Gibt ein visuelles Trend-Symbol basierend auf zufälligen Wertanpassungen
-     * Diese einfache Implementierung könnte durch echte Trendberechnung ersetzt werden
+     * Gibt ein zufälliges Trend-Symbol zurück
      */
-    private String getTrendIcon(double preis) {
-        // Vereinfachte Darstellung: zufällig auf/ab/seitwärts
+    private String getTrendIcon() {
         double zufall = Math.random();
         if (zufall < 0.33) return "📈 steigend";
         if (zufall < 0.66) return "📉 fallend";
@@ -221,13 +176,15 @@ public class Boersensimulator {
     }
 
     /**
-     * Gibt Statistiken zur Simulation aus
+     * Zeigt die finalen Statistiken am Ende
      */
-    private void zeigeStatistiken() {
-        logger.info("");
-        logger.info("📈 SIMULATIONS-STATISTIKEN:");
-        logger.info("  • Runden durchgeführt: {}", rundenZaehler);
-        logger.info("  • Roboter-Name: {}", roboter.getName());
-        logger.info("  • Aktuelles Vermögen: €{}", roboter.berechnetGesamtvermoegen());
+    private void zeigeFinaleStatistiken() {
+        logger.info("═══════════════════════════════════════════════════════════════");
+        logger.info("📈 FINALE STATISTIKEN:");
+        logger.info("  • Runden simuliert: {}", rundenZaehler);
+        logger.info("  • Roboter: {}", roboter.getName());
+        logger.info("  • Finales Vermögen: €{}", roboter.berechnetGesamtvermoegen());
+        logger.info("═══════════════════════════════════════════════════════════════");
     }
+}
 }
