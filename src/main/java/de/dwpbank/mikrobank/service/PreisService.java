@@ -25,7 +25,7 @@ public class PreisService {
      * @return der neue, gültige Preis
      */
     public double ermittleAktuellenPreis(Aktie aktie) {
-        
+
         // IMPLEMENTIERUNG:
         // 1. Lese den aktuellen Preis aus der Aktie
         // 2. Berechne eine zufällige Preisänderung (+/- Prozent)
@@ -34,6 +34,6 @@ public class PreisService {
         // 5. Setze den neuen Preis in der Aktie
         // 6. Gib den neuen Preis zurück
 
-        return 0; 
+        return 0;
     }
 }

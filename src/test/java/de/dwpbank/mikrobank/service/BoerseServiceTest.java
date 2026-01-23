@@ -11,16 +11,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit Tests für den BoerseService.
- * 
+ *
  * Diese Tests prüfen den kompletten Aktienkauf- und Verkaufsprozess.
- * 
+ *
  * **Kauf** ist erfolgreich, wenn:
  * 1. Die Order gültig ist
  * 2. Der Preis ermittelt wird
  * 3. Genug Guthaben vorhanden ist
  * 4. Das Geld vom Konto abgebucht wird
  * 5. Der Kurs im KursService gespeichert wird
- * 
+ *
  * **Verkauf** ist erfolgreich, wenn:
  * 1. Die Order gültig ist
  * 2. Der Preis ermittelt wird
@@ -50,7 +50,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(1000);  // 1000 Euro auf dem Konto
         Aktie aktie = new Aktie("Apple", 100);  // Preis 100 Euro pro Aktie
         int menge = 5;  // Wir wollen 5 Aktien kaufen = 500 Euro
-        
+
         // Act
         // Der Kauf sollte ohne Exception erfolgreich sein
         assertDoesNotThrow(() -> boerseService.kaufe(konto, aktie, menge),
@@ -66,10 +66,10 @@ class BoerseServiceTest {
         int menge = 2;  // 2 Aktien * 100 Euro = 200 Euro
 
         double guthabenVorher = konto.getKontostand();
-        
+
         // Act
         boerseService.kaufe(konto, aktie, menge);
-        
+
         // Assert
         assertTrue(konto.getKontostand() < guthabenVorher,
             "Das Guthaben sollte nach dem Kauf reduziert sein");
@@ -82,7 +82,7 @@ class BoerseServiceTest {
         Aktie aktie = new Aktie("Microsoft", 100);
         int menge = 5;  // 5 Aktien * 100 Euro = 500 Euro
         Konto konto = new Konto(500);  // Exakt 500 Euro
-        
+
         // Act & Assert
         assertDoesNotThrow(() -> boerseService.kaufe(konto, aktie, menge),
             "Ein Kauf mit exakt benötigtem Guthaben sollte erfolgreich sein");
@@ -95,7 +95,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(200);
         Aktie aktie = new Aktie("Tesla", 100);
         int menge = 1;
-        
+
         // Act & Assert
         assertDoesNotThrow(() -> boerseService.kaufe(konto, aktie, menge),
             "Der Kauf einer einzelnen Aktie sollte erfolgreich sein");
@@ -108,7 +108,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(100000);  // 100.000 Euro
         Aktie aktie = new Aktie("Google", 100);
         int menge = 500;  // 500 Aktien
-        
+
         // Act & Assert
         assertDoesNotThrow(() -> boerseService.kaufe(konto, aktie, menge),
             "Der Kauf vieler Aktien sollte möglich sein");
@@ -123,7 +123,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(1000);
         Aktie aktie = null;
         int menge = 5;
-        
+
         // Act & Assert
         assertThrows(IllegalArgumentException.class,
                 () -> boerseService.kaufe(konto, aktie, menge),
@@ -137,7 +137,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(1000);
         Aktie aktie = new Aktie("Apple", 100);
         int menge = 0;
-        
+
         // Act & Assert
         assertThrows(IllegalArgumentException.class,
                 () -> boerseService.kaufe(konto, aktie, menge),
@@ -151,7 +151,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(1000);
         Aktie aktie = new Aktie("SAP", 100);
         int menge = -5;
-        
+
         // Act & Assert
         assertThrows(IllegalArgumentException.class,
                 () -> boerseService.kaufe(konto, aktie, menge),
@@ -167,7 +167,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(200);  // 200 Euro
         Aktie aktie = new Aktie("Apple", 100);  // 100 Euro pro Aktie
         int menge = 5;  // Würde 500 Euro kosten
-        
+
         // Act & Assert
         assertThrows(IllegalStateException.class,
                 () -> boerseService.kaufe(konto, aktie, menge),
@@ -181,7 +181,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(0);
         Aktie aktie = new Aktie("Microsoft", 100);
         int menge = 1;
-        
+
         // Act & Assert
         assertThrows(IllegalStateException.class,
                 () -> boerseService.kaufe(konto, aktie, menge),
@@ -195,7 +195,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(99);  // 99 Euro
         Aktie aktie = new Aktie("Google", 100);  // 100 Euro pro Aktie
         int menge = 1;  // Würde 100 Euro kosten
-        
+
         // Act & Assert
         assertThrows(IllegalStateException.class,
                 () -> boerseService.kaufe(konto, aktie, menge),
@@ -211,7 +211,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(10);
         Aktie aktie = new Aktie("Penny", 1);  // 1 Euro pro Aktie
         int menge = 5;  // 5 Euro
-        
+
         // Act & Assert
         assertDoesNotThrow(() -> boerseService.kaufe(konto, aktie, menge),
             "Der Kauf von günstigen Aktien sollte möglich sein");
@@ -224,7 +224,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(5000);
         Aktie aktie = new Aktie("Luxury", 1000);  // 1000 Euro pro Aktie
         int menge = 3;  // 3000 Euro
-        
+
         // Act & Assert
         assertDoesNotThrow(() -> boerseService.kaufe(konto, aktie, menge),
             "Der Kauf teurer Aktien sollte möglich sein");
@@ -239,7 +239,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(5000);
         Aktie aktie = new Aktie("Apple", 100);  // 100 Euro pro Aktie
         int menge = 10;  // Verkaufe 10 Aktien = 1000 Euro Erlös
-        
+
         // Act
         // Der Verkauf sollte ohne Exception erfolgreich sein
         assertDoesNotThrow(() -> boerseService.verkaufe(konto, aktie, menge),
@@ -255,10 +255,10 @@ class BoerseServiceTest {
         int menge = 5;  // 5 Aktien * 100 Euro = 500 Euro Erlös
 
         double guthabenVorher = konto.getKontostand();
-        
+
         // Act
         boerseService.verkaufe(konto, aktie, menge);
-        
+
         // Assert
         assertTrue(konto.getKontostand() > guthabenVorher,
             "Das Guthaben sollte nach dem Verkauf erhöht sein");
@@ -271,7 +271,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(500);
         Aktie aktie = new Aktie("Tesla", 100);
         int menge = 1;
-        
+
         // Act & Assert
         assertDoesNotThrow(() -> boerseService.verkaufe(konto, aktie, menge),
             "Der Verkauf einer einzelnen Aktie sollte erfolgreich sein");
@@ -284,7 +284,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(1000);
         Aktie aktie = new Aktie("Google", 100);
         int menge = 500;  // 500 Aktien = 50.000 Euro Erlös
-        
+
         // Act & Assert
         assertDoesNotThrow(() -> boerseService.verkaufe(konto, aktie, menge),
             "Der Verkauf vieler Aktien sollte möglich sein");
@@ -297,7 +297,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(100);
         Aktie aktie = new Aktie("Luxury", 1000);  // 1000 Euro pro Aktie
         int menge = 3;  // 3 Aktien = 3000 Euro Erlös
-        
+
         // Act & Assert
         assertDoesNotThrow(() -> boerseService.verkaufe(konto, aktie, menge),
             "Der Verkauf teurer Aktien sollte möglich sein");
@@ -312,7 +312,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(1000);
         Aktie aktie = null;
         int menge = 5;
-        
+
         // Act & Assert
         assertThrows(IllegalArgumentException.class,
                 () -> boerseService.verkaufe(konto, aktie, menge),
@@ -326,7 +326,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(1000);
         Aktie aktie = new Aktie("Apple", 100);
         int menge = 0;
-        
+
         // Act & Assert
         assertThrows(IllegalArgumentException.class,
                 () -> boerseService.verkaufe(konto, aktie, menge),
@@ -340,7 +340,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(1000);
         Aktie aktie = new Aktie("SAP", 100);
         int menge = -5;
-        
+
         // Act & Assert
         assertThrows(IllegalArgumentException.class,
                 () -> boerseService.verkaufe(konto, aktie, menge),
@@ -356,7 +356,7 @@ class BoerseServiceTest {
         Konto konto = new Konto(100);
         Aktie aktie = new Aktie("Penny", 1);  // 1 Euro pro Aktie
         int menge = 5;  // 5 Euro Erlös
-        
+
         // Act & Assert
         assertDoesNotThrow(() -> boerseService.verkaufe(konto, aktie, menge),
             "Der Verkauf von günstigen Aktien sollte möglich sein");

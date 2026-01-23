@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Referenztests für die Konto-Klasse
- * 
+ *
  * Diese Tests demonstrieren, wie die Konto-Klasse funktioniert
  * und dienen als Beispiel für das Testen von Model-Klassen.
  */
@@ -70,9 +70,9 @@ class KontoTest {
     void multipleKontosAreIndependent() {
         Konto konto1 = new Konto(100);
         Konto konto2 = new Konto(200);
-        
+
         konto1.setKontostand(150);
-        
+
         assertEquals(150, konto1.getKontostand());
         assertEquals(200, konto2.getKontostand());
     }

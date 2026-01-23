@@ -8,11 +8,11 @@
 
 ### Kernfunktionen
 
-✅ **Kontoführung** - Einzahlungen und Auszahlungen verwalten  
-✅ **Aktienhandel** - Aktien kaufen und verkaufen  
-✅ **Preisermittlung** - Dynamische Aktienkurse mit realistischen Preisschwankungen  
-✅ **Ordervalidierung** - Prüfung von Kaufanfragen auf Gültigkeit  
-✅ **Transaktionslogik** - Sichere Abwicklung von Aktiengeschäften  
+✅ **Kontoführung** - Einzahlungen und Auszahlungen verwalten
+✅ **Aktienhandel** - Aktien kaufen und verkaufen
+✅ **Preisermittlung** - Dynamische Aktienkurse mit realistischen Preisschwankungen
+✅ **Ordervalidierung** - Prüfung von Kaufanfragen auf Gültigkeit
+✅ **Transaktionslogik** - Sichere Abwicklung von Aktiengeschäften
 
 ---
 
@@ -204,24 +204,24 @@ validierungsService.validiereKauf(null, 5); // wirft IllegalArgumentException
 Dieses Projekt ist **perfekt zum Lernen** von:
 
 1. **Object-Oriented Programming** (OOP)
-   - Klassen, Objekte, Vererbung
-   
+    - Klassen, Objekte, Vererbung
+
 2. **Service-oriented Architecture**
-   - Separation of Concerns
-   - Single Responsibility Principle
-   
+    - Separation of Concerns
+    - Single Responsibility Principle
+
 3. **Unit Testing mit JUnit 5**
-   - AAA-Pattern (Arrange, Act, Assert)
-   - assertThrows, assertEquals, assertTrue
-   
+    - AAA-Pattern (Arrange, Act, Assert)
+    - assertThrows, assertEquals, assertTrue
+
 4. **Java Best Practices**
-   - Immutable Objects (Konto, Aktie)
-   - Exception Handling
-   - Logging mit Lombok
+    - Immutable Objects (Konto, Aktie)
+    - Exception Handling
+    - Logging mit Lombok
 
 5. **Maven Projektstruktur**
-   - pom.xml, Dependencies
-   - Build Lifecycle
+    - pom.xml, Dependencies
+    - Build Lifecycle
 
 ---
 
@@ -230,10 +230,10 @@ Dieses Projekt ist **perfekt zum Lernen** von:
 1. **Services implementieren** - Füllen Sie die Service-Methoden mit Geschäftslogik
 2. **Alle Tests grün machen** - Tests schreiben ist einfach, Code schreiben ist die Kunst!
 3. **Erweitert bauen** - Fügen Sie neue Features hinzu:
-   - Portfolio-Verwaltung
-   - Transaktionsverlauf
-   - Depot/Lagerbestände für Aktien
-   - REST API mit Spring Boot
+    - Portfolio-Verwaltung
+    - Transaktionsverlauf
+    - Depot/Lagerbestände für Aktien
+    - REST API mit Spring Boot
 
 ---
 

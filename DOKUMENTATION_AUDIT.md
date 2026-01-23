@@ -1,7 +1,7 @@
 # ✅ Dokumentations-Audit: README & PRAKTIKUM_PLAN
 
-**Datum:** 23. Januar 2026  
-**Status:** ✅ **ERFOLGREICH KORRIGIERT** - Alle Fehler behoben!  
+**Datum:** 23. Januar 2026
+**Status:** ✅ **ERFOLGREICH KORRIGIERT** - Alle Fehler behoben!
 **Letzte Überprüfung:** Nach Korrektionen durchgeführt
 
 ## 📋 Befunde
@@ -23,20 +23,20 @@
 
 **Was veraltet ist:**
 1. **Test-Zahlen nicht aktualisiert**:
-   - Plan sagt: "20+ Tests HandelsRoboter"
-   - Aktuell: 17 Tests HandelsRoboter + 18 AktieTests + 10 KontoTests
+    - Plan sagt: "20+ Tests HandelsRoboter"
+    - Aktuell: 17 Tests HandelsRoboter + 18 AktieTests + 10 KontoTests
 
 2. **Pfade im Plan können veraltet sein**:
-   - HandelsRoboter Pfad war früher: `service/HandelsRoboter.java`
-   - Aktuell: `HandelsRoboter.java` (Root-Package)
+    - HandelsRoboter Pfad war früher: `service/HandelsRoboter.java`
+    - Aktuell: `HandelsRoboter.java` (Root-Package)
 
 3. **Boersensimulator wird nicht erwähnt**:
-   - Sollte als Demo/Integrations-Test erklärt werden
-   - Könnte am Ende von Woche 2 als Projekt verwendet werden
+    - Sollte als Demo/Integrations-Test erklärt werden
+    - Könnte am Ende von Woche 2 als Projekt verwendet werden
 
 4. **BoerseService-Erweiterung nicht erwähnt**:
-   - BoerseService hat jetzt `notiereAktie()`, `simuliereHandelsrunde()` etc.
-   - War vorher nur für kaufe()/verkaufe() zuständig
+    - BoerseService hat jetzt `notiereAktie()`, `simuliereHandelsrunde()` etc.
+    - War vorher nur für kaufe()/verkaufe() zuständig
 
 ## ✅ VALIDIERUNG DER 4 PUNKTE (Januar 2026)
 
@@ -102,7 +102,7 @@ Die 4 Methoden sind mit Code-Beispielen erklärt:
 
 **Integration im Boersensimulator-Flow gezeigt:**
 ```
-notiereAktie() → simuliereHandelsrunde() → gibAlleAktien() 
+notiereAktie() → simuliereHandelsrunde() → gibAlleAktien()
 → Roboter.handeleSession() → gibMarktbericht()
 ```
 

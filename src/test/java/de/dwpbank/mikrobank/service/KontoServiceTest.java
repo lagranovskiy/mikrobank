@@ -10,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit Tests für den KontoService.
- * 
+ *
  * Diese Tests prüfen die Funktionalität von Einzahlungen und Auszahlungen.
  * Jeder Test ist nach dem AAA-Pattern (Arrange, Act, Assert) strukturiert:
- * 
+ *
  * Arrange (Vorbereitung): Testdaten erstellen
  * Act (Ausführung): Die zu testende Methode aufrufen
  * Assert (Überprüfung): Das Ergebnis mit assertEquals(), assertThrows() etc. prüfen
@@ -42,11 +42,11 @@ class KontoServiceTest {
         // === ARRANGE (Vorbereitung) ===
         // Erstelle ein neues Konto mit 100 Euro Startguthaben
         Konto konto = new Konto(100);
-        
+
         // === ACT (Ausführung) ===
         // Rufe die zu testende Methode auf: zahle 50 Euro ein
         kontoService.einzahlen(konto, 50);
-        
+
         // === ASSERT (Überprüfung) ===
         // assertEquals(erwartet, tatsächlich) - prüft ob beide Werte gleich sind
         // Erwartet: 150 Euro (100 + 50)
@@ -58,11 +58,11 @@ class KontoServiceTest {
     void einzahlenMehrereEinzahlungen() {
         // Arrange: Konto mit 100 Euro
         Konto konto = new Konto(100);
-        
+
         // Act: Zwei Einzahlungen hintereinander
         kontoService.einzahlen(konto, 50);  // 100 + 50 = 150
         kontoService.einzahlen(konto, 25);  // 150 + 25 = 175
-        
+
         // Assert: Das Endergebnis sollte 175 Euro sein
         assertEquals(175, konto.getKontostand());
     }
@@ -72,10 +72,10 @@ class KontoServiceTest {
     void einzahlenSehrKleinerBetrag() {
         // Arrange
         Konto konto = new Konto(100);
-        
+
         // Act: Zahle 1 Cent ein
         kontoService.einzahlen(konto, 0.01);
-        
+
         // Assert: 100 + 0.01 = 100.01
         assertEquals(100.01, konto.getKontostand());
     }
@@ -85,10 +85,10 @@ class KontoServiceTest {
     void einzahlenGrosserBetrag() {
         // Arrange
         Konto konto = new Konto(1000);
-        
+
         // Act: Zahle 1 Million Euro ein (unrealistisch, aber gültig)
         kontoService.einzahlen(konto, 1000000);
-        
+
         // Assert: 1000 + 1000000 = 1001000
         assertEquals(1001000, konto.getKontostand());
     }
@@ -98,7 +98,7 @@ class KontoServiceTest {
     void einzahlenMitNegativemBetragWirftException() {
         // Arrange
         Konto konto = new Konto(100);
-        
+
         // === ASSERT + ACT kombiniert ===
         // assertThrows(erwarteteException, aufzurufenderCode)
         // Dies bedeutet: Rufe einzahlen(-10) auf und prüfe, ob IllegalArgumentException geworfen wird
@@ -114,7 +114,7 @@ class KontoServiceTest {
     void einzahlenMitNullBetragWirftException() {
         // Arrange
         Konto konto = new Konto(100);
-        
+
         // Act & Assert: assertThrows prüft ob Exception geworfen wird
         // Die Lambda-Expression () -> {...} ist eine anonyme Funktion
         // Sie wird von assertThrows aufgerufen und muss eine Exception werfen
@@ -127,7 +127,7 @@ class KontoServiceTest {
     void einzahlenMitSehrGrossemNegativemBetragWirftException() {
         // Arrange
         Konto konto = new Konto(100);
-        
+
         // Act & Assert
         assertThrows(IllegalArgumentException.class,
                 () -> kontoService.einzahlen(konto, -999999));
@@ -140,10 +140,10 @@ class KontoServiceTest {
     void auszahlenVerringertKontostand() {
         // Arrange
         Konto konto = new Konto(100);
-        
+
         // Act: Zahle 30 Euro aus
         kontoService.auszahlen(konto, 30);
-        
+
         // Assert: 100 - 30 = 70
         assertEquals(70, konto.getKontostand());
     }
@@ -153,10 +153,10 @@ class KontoServiceTest {
     void auszahlenGanzesBetrag() {
         // Arrange
         Konto konto = new Konto(100);
-        
+
         // Act: Zahle den kompletten Betrag aus
         kontoService.auszahlen(konto, 100);
-        
+
         // Assert: Kontostand sollte 0 sein
         assertEquals(0, konto.getKontostand());
     }
@@ -166,11 +166,11 @@ class KontoServiceTest {
     void auszahlenMehrereAuszahlungen() {
         // Arrange
         Konto konto = new Konto(100);
-        
+
         // Act: Zwei Auszahlungen nacheinander
         kontoService.auszahlen(konto, 30);  // 100 - 30 = 70
         kontoService.auszahlen(konto, 20);  // 70 - 20 = 50
-        
+
         // Assert: Endergebnis = 50
         assertEquals(50, konto.getKontostand());
     }
@@ -180,7 +180,7 @@ class KontoServiceTest {
     void auszahlenMitNichtGenugGuthabenWirftException() {
         // Arrange: Nur 100 Euro auf dem Konto
         Konto konto = new Konto(100);
-        
+
         // Act & Assert:
         // Versuche 150 Euro auszuzahlen (unmöglich!)
         // assertThrows erwartet, dass IllegalArgumentException geworfen wird
@@ -194,7 +194,7 @@ class KontoServiceTest {
     void auszahlenMitLeeremKontoWirftException() {
         // Arrange: Kontostand ist 0
         Konto konto = new Konto(0);
-        
+
         // Act & Assert: Kann nicht von 0 Euro etwas abheben
         assertThrows(IllegalArgumentException.class,
                 () -> kontoService.auszahlen(konto, 1));
@@ -205,7 +205,7 @@ class KontoServiceTest {
     void auszahlenMitNegativemBetragWirftException() {
         // Arrange
         Konto konto = new Konto(100);
-        
+
         // Act & Assert: Man kann keinen negativen Betrag abheben
         assertThrows(IllegalArgumentException.class,
                 () -> kontoService.auszahlen(konto, -50));
@@ -216,7 +216,7 @@ class KontoServiceTest {
     void auszahlenMitNullBetragWirftException() {
         // Arrange
         Konto konto = new Konto(100);
-        
+
         // Act & Assert: Null Euro abheben macht keinen Sinn
         assertThrows(IllegalArgumentException.class,
                 () -> kontoService.auszahlen(konto, 0));
@@ -227,7 +227,7 @@ class KontoServiceTest {
     void auszahlenWuerdeNegativenGuthabenFuehrenWirftException() {
         // Arrange: 50 Euro auf dem Konto
         Konto konto = new Konto(50);
-        
+
         // Act & Assert:
         // Versuche 50.01 Euro abzuheben (würde -0.01 Euro ergeben)
         // Das ist nicht erlaubt!

@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Referenztests für die Aktie-Klasse
- * 
+ *
  * Diese Tests demonstrieren, wie die Aktie-Klasse funktioniert
  * und dienen als Beispiel für das Testen von Model-Klassen.
  */
@@ -90,9 +90,9 @@ class AktieTest {
     void multipleAktieInstancesAreIndependent() {
         Aktie apple = new Aktie("Apple", 100);
         Aktie microsoft = new Aktie("Microsoft", 200);
-        
+
         apple.setPreis(150);
-        
+
         assertEquals(150, apple.getPreis());
         assertEquals(200, microsoft.getPreis());
     }
@@ -101,7 +101,7 @@ class AktieTest {
     void aktieNameIsCaseSensitive() {
         Aktie apple1 = new Aktie("Apple", 100);
         Aktie apple2 = new Aktie("APPLE", 100);
-        
+
         assertNotEquals(apple1.getName(), apple2.getName());
     }
 

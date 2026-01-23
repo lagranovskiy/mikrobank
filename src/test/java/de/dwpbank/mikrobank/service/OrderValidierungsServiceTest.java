@@ -10,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Unit Tests für den OrderValidierungsService.
- * 
+ *
  * Diese Tests prüfen die Validierung von Kauf- und Verkaufsorder.
  * Die Order muss eine gültige Aktie und eine positive Menge haben.
- * 
+ *
  * Syntax-Erklärung:
  * - assertDoesNotThrow(aufzurufenderCode): Test erfolgreich wenn KEINE Exception
  * - assertThrows(exceptionTyp, aufzurufenderCode): Test erfolgreich wenn Exception geworfen wird
@@ -41,7 +41,7 @@ class OrderValidierungsServiceTest {
         // Arrange
         Aktie aktie = new Aktie("Apple", 150);
         int menge = 10;
-        
+
         // Act & Assert
         // Diese Methode sollte keine Exception werfen, wenn alles gültig ist
         assertDoesNotThrow(() -> validierungsService.validiereKauf(aktie, menge),
@@ -54,7 +54,7 @@ class OrderValidierungsServiceTest {
         // Arrange
         Aktie aktie = new Aktie("SAP", 100);
         int menge = 1;
-        
+
         // Act & Assert
         assertDoesNotThrow(() -> validierungsService.validiereKauf(aktie, menge),
             "Eine Kauforder mit Menge 1 sollte gültig sein");
@@ -66,7 +66,7 @@ class OrderValidierungsServiceTest {
         // Arrange
         Aktie aktie = new Aktie("Microsoft", 200);
         int menge = 10000;
-        
+
         // Act & Assert
         assertDoesNotThrow(() -> validierungsService.validiereKauf(aktie, menge),
             "Eine Kauforder mit großer Menge sollte gültig sein");
@@ -78,7 +78,7 @@ class OrderValidierungsServiceTest {
         // Arrange
         Aktie aktie = null;
         int menge = 10;
-        
+
         // Act & Assert
         assertThrows(IllegalArgumentException.class,
                 () -> validierungsService.validiereKauf(aktie, menge),
@@ -91,7 +91,7 @@ class OrderValidierungsServiceTest {
         // Arrange
         Aktie aktie = new Aktie("Tesla", 200);
         int menge = 0;
-        
+
         // Act & Assert
         assertThrows(IllegalArgumentException.class,
                 () -> validierungsService.validiereKauf(aktie, menge),
@@ -104,7 +104,7 @@ class OrderValidierungsServiceTest {
         // Arrange
         Aktie aktie = new Aktie("Google", 140);
         int menge = -5;
-        
+
         // Act & Assert
         assertThrows(IllegalArgumentException.class,
                 () -> validierungsService.validiereKauf(aktie, menge),
@@ -117,7 +117,7 @@ class OrderValidierungsServiceTest {
         // Arrange
         Aktie aktie = null;
         int menge = -10;
-        
+
         // Act & Assert
         // Es sollte eine Exception geworfen werden (wahrscheinlich für Aktie zuerst)
         assertThrows(IllegalArgumentException.class,
@@ -133,7 +133,7 @@ class OrderValidierungsServiceTest {
         // Arrange
         Aktie aktie = new Aktie("Apple", 150);
         int menge = 5;
-        
+
         // Act & Assert
         assertDoesNotThrow(() -> validierungsService.validiereVerkauf(aktie, menge),
             "Eine gültige Verkaufsorder sollte akzeptiert werden");
@@ -145,7 +145,7 @@ class OrderValidierungsServiceTest {
         // Arrange
         Aktie aktie = new Aktie("SAP", 100);
         int menge = 1;
-        
+
         // Act & Assert
         assertDoesNotThrow(() -> validierungsService.validiereVerkauf(aktie, menge),
             "Eine Verkaufsorder mit Menge 1 sollte gültig sein");
@@ -157,7 +157,7 @@ class OrderValidierungsServiceTest {
         // Arrange
         Aktie aktie = new Aktie("Microsoft", 200);
         int menge = 5000;
-        
+
         // Act & Assert
         assertDoesNotThrow(() -> validierungsService.validiereVerkauf(aktie, menge),
             "Eine Verkaufsorder mit großer Menge sollte gültig sein");
@@ -169,7 +169,7 @@ class OrderValidierungsServiceTest {
         // Arrange
         Aktie aktie = null;
         int menge = 5;
-        
+
         // Act & Assert
         assertThrows(IllegalArgumentException.class,
                 () -> validierungsService.validiereVerkauf(aktie, menge),
@@ -182,7 +182,7 @@ class OrderValidierungsServiceTest {
         // Arrange
         Aktie aktie = new Aktie("Tesla", 200);
         int menge = 0;
-        
+
         // Act & Assert
         assertThrows(IllegalArgumentException.class,
                 () -> validierungsService.validiereVerkauf(aktie, menge),
@@ -195,7 +195,7 @@ class OrderValidierungsServiceTest {
         // Arrange
         Aktie aktie = new Aktie("Google", 140);
         int menge = -10;
-        
+
         // Act & Assert
         assertThrows(IllegalArgumentException.class,
                 () -> validierungsService.validiereVerkauf(aktie, menge),
@@ -208,7 +208,7 @@ class OrderValidierungsServiceTest {
         // Arrange
         Aktie aktie = null;
         int menge = -5;
-        
+
         // Act & Assert
         assertThrows(IllegalArgumentException.class,
                 () -> validierungsService.validiereVerkauf(aktie, menge),

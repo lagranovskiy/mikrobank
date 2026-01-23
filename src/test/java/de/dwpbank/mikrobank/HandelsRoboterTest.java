@@ -304,7 +304,7 @@ class HandelsRoboterTest {
 
         // Assert
         assertTrue(status.contains("TradeBot2000"), "Status sollte Namen enthalten");
-        assertTrue(status.contains("€") || status.contains("Guthaben"), 
+        assertTrue(status.contains("€") || status.contains("Guthaben"),
                 "Status sollte Guthaben enthalten");
         assertTrue(status.contains("Depot") || status.contains("Apple"),
                 "Status sollte Depot-Informationen enthalten");
