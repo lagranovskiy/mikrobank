@@ -2,6 +2,7 @@ package de.dwpbank.mikrobank;
 
 import de.dwpbank.mikrobank.model.Aktie;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -47,6 +48,9 @@ public class Boersensimulator {
     private List<Aktie> aktien;
     private Random random;
     private int rundenZaehler;
+    
+    // Logger für diese Klasse (wird verwendet wenn @Slf4j nicht verfügbar)
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(Boersensimulator.class);
 
     /**
      * Haupteinstiegspunkt der Simulation
@@ -78,20 +82,20 @@ public class Boersensimulator {
         aktien.add(new Aktie("Siemens", 95.75));
         aktien.add(new Aktie("Deutsche Telekom", 28.30));
 
-        log.info("✅ Roboter erstellt: {}", roboter.getName());
-        log.info("✅ {} Aktien hinzugefügt", aktien.size());
-        log.info("✅ Startkapital: 50.000€");
-        log.info("");
-        log.info("Starten Sie die Simulation mit Enter...");
-        log.info("Zum Beenden geben Sie 'q' ein und drücken Enter.");
-        log.info("");
+        logger.info("✅ Roboter erstellt: {}", roboter.getName());
+        logger.info("✅ {} Aktien hinzugefügt", aktien.size());
+        logger.info("✅ Startkapital: 50.000€");
+        logger.info("");
+        logger.info("Starten Sie die Simulation mit Enter...");
+        logger.info("Zum Beenden geben Sie 'q' ein und drücken Enter.");
+        logger.info("");
 
         // Warte auf Benutzer-Input zum Starten
         Scanner scanner = new Scanner(System.in);
         scanner.nextLine();
-        log.info("");
-        log.info("▶ SIMULATION GESTARTET!");
-        log.info("");
+        logger.info("");
+        logger.info("▶ SIMULATION GESTARTET!");
+        logger.info("");
     }
 
     /**
@@ -105,8 +109,8 @@ public class Boersensimulator {
             while (true) {
                 String input = scanner.nextLine();
                 if (input.equalsIgnoreCase("q")) {
-                    log.info("");
-                    log.info("⏹ Simulation wird beendet...");
+                    logger.info("");
+                    logger.info("⏹ Simulation wird beendet...");
                     System.exit(0);
                 }
             }
@@ -132,32 +136,32 @@ public class Boersensimulator {
                 // ──────────────────────────────────────────
                 // SCHRITT 3: Roboter handelt
                 // ──────────────────────────────────────────
-                log.info("");
-                log.info("🤖 HANDEL-RUNDE {}:", rundenZaehler);
+                logger.info("");
+                logger.info("🤖 HANDEL-RUNDE {}:", rundenZaehler);
                 roboter.handeleSession(aktien);
 
                 // ──────────────────────────────────────────
                 // SCHRITT 4: Zeige Roboter-Status
                 // ──────────────────────────────────────────
-                log.info("");
-                log.info(roboter.gibStatus());
+                logger.info("");
+                logger.info(roboter.gibStatus());
 
                 // ──────────────────────────────────────────
                 // SCHRITT 5: Warte vor nächster Runde
                 // ──────────────────────────────────────────
-                log.info("");
-                log.info("⏳ Nächste Runde in {} Sekunden... (q + Enter zum Beenden)",
+                logger.info("");
+                logger.info("⏳ Nächste Runde in {} Sekunden... (q + Enter zum Beenden)",
                         SIMULATION_DELAY_MS / 1000);
-                log.info("═══════════════════════════════════════════════════════════════");
-                log.info("");
+                logger.info("═══════════════════════════════════════════════════════════════");
+                logger.info("");
 
                 Thread.sleep(SIMULATION_DELAY_MS);
 
             } catch (InterruptedException e) {
-                log.error("Simulation unterbrochen: {}", e.getMessage());
+                logger.error("Simulation unterbrochen: {}", e.getMessage());
                 break;
             } catch (Exception e) {
-                log.error("Fehler in Simulation: {}", e.getMessage(), e);
+                logger.error("Fehler in Simulation: {}", e.getMessage(), e);
                 Thread.yield();
             }
         }
@@ -187,21 +191,21 @@ public class Boersensimulator {
     private void zeigeAktuelleKurse() {
         String zeitstempel = LocalDateTime.now().format(FORMATTER);
 
-        log.info("");
-        log.info("📊 AKTUELLE KURSE - {}", zeitstempel);
-        log.info("┌──────────────────┬──────────┬──────────────┐");
-        log.info("│ Aktie            │ Preis    │ Trend        │");
-        log.info("├──────────────────┼──────────┼──────────────┤");
+        logger.info("");
+        logger.info("📊 AKTUELLE KURSE - {}", zeitstempel);
+        logger.info("┌──────────────────┬──────────┬──────────────┐");
+        logger.info("│ Aktie            │ Preis    │ Trend        │");
+        logger.info("├──────────────────┼──────────┼──────────────┤");
 
         for (Aktie aktie : aktien) {
             String trend = getTrendIcon(aktie.getPreis());
-            log.info("│ {:<16} │ €{:>7.2f} │ {:<12} │",
+            logger.info("│ {:<16} │ €{:>7.2f} │ {:<12} │",
                     aktie.getName(),
                     aktie.getPreis(),
                     trend);
         }
 
-        log.info("└──────────────────┴──────────┴──────────────┘");
+        logger.info("└──────────────────┴──────────┴──────────────┘");
     }
 
     /**
@@ -220,10 +224,10 @@ public class Boersensimulator {
      * Gibt Statistiken zur Simulation aus
      */
     private void zeigeStatistiken() {
-        log.info("");
-        log.info("📈 SIMULATIONS-STATISTIKEN:");
-        log.info("  • Runden durchgeführt: {}", rundenZaehler);
-        log.info("  • Roboter-Name: {}", roboter.getName());
-        log.info("  • Aktuelles Vermögen: €{}", roboter.berechnetGesamtvermoegen());
+        logger.info("");
+        logger.info("📈 SIMULATIONS-STATISTIKEN:");
+        logger.info("  • Runden durchgeführt: {}", rundenZaehler);
+        logger.info("  • Roboter-Name: {}", roboter.getName());
+        logger.info("  • Aktuelles Vermögen: €{}", roboter.berechnetGesamtvermoegen());
     }
 }
