@@ -10,22 +10,22 @@ import java.util.*;
 
 /**
  * HandelsRoboter - Ein automatisierter Tradingsystem für die Mini-Börse
- *
+ * <p>
  * Der HandelsRoboter führt automatisch Kauf- und Verkaufsentscheidungen durch,
  * um Gewinn zu erzielen. Dazu nutzt er:
- *
+ * <p>
  * 1. **BoerseService**: Zum Kaufen und Verkaufen von Aktien
  * 2. **KursService**: Zur Analyse von Kurstrends und Entscheidungsfindung
  * 3. **Eigenes Depot**: Verwaltung der gehaltenen Aktien
- *
+ * <p>
  * ZIEL: Maximiere den Gewinn durch intelligentes Kaufen und Verkaufen!
- *
+ * <p>
  * ═══════════════════════════════════════════════════════════════════════════
- *
+ * <p>
  * HANDELSLOGIK (Algorithmus):
- *
+ * <p>
  * Der Roboter folgt dieser Entscheidungslogik pro Handelstag:
- *
+ * <p>
  * ┌─────────────────────────────────────────────────────────────────────────┐
  * │ SCHRITT 1: ANALYSIERE DEN MARKT                                         │
  * │                                                                         │
@@ -35,7 +35,7 @@ import java.util.*;
  * │   - Mit Durchschnittskurs vergleichen                                   │
  * │   - Entscheidung treffen: KAUFEN? oder VERKAUFEN? oder HALTEN?          │
  * └─────────────────────────────────────────────────────────────────────────┘
- *
+ * <p>
  * ┌─────────────────────────────────────────────────────────────────────────┐
  * │ SCHRITT 2: KAUFENTSCHEIDUNG                                             │
  * │                                                                         │
@@ -52,7 +52,7 @@ import java.util.*;
  * │   4. Speichere die Aktien im internen Depot: depot.put(aktie, anzahl)   │
  * │   5. KursService wird automatisch von BoerseService aktualisiert        │
  * └─────────────────────────────────────────────────────────────────────────┘
- *
+ * <p>
  * ┌─────────────────────────────────────────────────────────────────────────┐
  * │ SCHRITT 3: VERKAUFSENTSCHEIDUNG                                         │
  * │                                                                         │
@@ -68,31 +68,31 @@ import java.util.*;
  * │   4. Guthaben wird automatisch vom BoerseService aktualisiert           │
  * │   5. KursService wird automatisch von BoerseService aktualisiert        │
  * └─────────────────────────────────────────────────────────────────────────┘
- *
+ * <p>
  * ═══════════════════════════════════════════════════════════════════════════
- *
+ * <p>
  * DATENSTRUKTUREN:
- *
+ * <p>
  * - name: String
  *     Der Name des Roboters (z.B. "RoboTrader", "AlgoBot")
- *
+ * <p>
  * - konto: Konto
  *     Das Bankkonto mit dem Startkapital
- *
+ * <p>
  * - depot: Map<String, Integer>
  *     Speichert welche Aktien der Roboter besitzt
  *     Key: Aktienname (z.B. "Apple", "BMW")
  *     Value: Anzahl der Aktien
  *     Beispiel: {"Apple": 5, "BMW": 3} → Roboter hat 5 Apple + 3 BMW
- *
+ * <p>
  * - boerseService: BoerseService
  *     Für Kauf und Verkauf von Aktien
- *
+ * <p>
  * - kursService: KursService
  *     Für Marktanalyse und Trendinformationen
- *
+ * <p>
  * ═══════════════════════════════════════════════════════════════════════════
- *
+ * <p>
  * METHODEN ZUM IMPLEMENTIEREN:
  *
  * @author Praktikant
@@ -182,54 +182,54 @@ public class HandelsRoboter {
 
     /**
      * HAUPTMETHODE: Der Roboter handelt an einem Tag
-     *
+     * <p>
      * Diese Methode wird täglich aufgerufen. Der Roboter soll:
-     *
+     * <p>
      * 1. KAUFE günstige Aktien:
      *    - Wenn kursService.istKursGuenstig(aktie) == true
      *    - UND Roboter hat genug Guthaben
      *    - UND Roboter besitzt nicht schon > 10 dieser Aktie
      *    - Dann: boerseService.kaufe(...) aufrufen
-     *
+     * <p>
      * 2. VERKAUFE teure Aktien:
      *    - Wenn kursService.istKursTeuer(aktie) == true
      *    - UND Roboter besitzt mindestens 1 dieser Aktie
      *    - Dann: boerseService.verkaufe(...) aufrufen
-     *
+     * <p>
      * 3. LOGGE die Aktion:
      *    - Kaufen: log.info("[name] kauft [anzahl]x [aktie.name()]")
      *    - Verkaufen: log.info("[name] verkauft [anzahl]x [aktie.name()]")
      *    - Halten: log.info("[name] hält Position in [aktie.name()]")
-     *
+     * <p>
      * 4. AKTUALISIERE das Depot:
      *    - Nach Kauf: depot.put(aktienname, neue_anzahl)
      *    - Nach Verkauf: entferne oder reduziere Anzahl
-     *
+     * <p>
      * HINT: Der Algorithmus sieht ungefähr so aus:
-     *
+     * <p>
      * ```
      * FUNCTION handleAnEinemTag(aktie):
      *     aktuellerPreis = hole preis von aktie
      *     depot.put(aktienname, alte_anzahl + gekaufte_anzahl)
-     *
+     * <p>
      *     IF kursService.istKursGuenstig(aktie) AND habe genug guthaben:
      *         DANN kaufen
      *         anzahl = berechne wieviel ich kaufen kann
      *         boerseService.kaufe(konto, aktie, anzahl)
      *         depot.put(aktie.getName(), bisherige_anzahl + anzahl)
      *         log.info("gekauft")
-     *
+     * <p>
      *     ELSE IF kursService.istKursTeuer(aktie) AND ich besitze diese aktie:
      *         DANN verkaufen
      *         anzahl = depot.get(aktie.getName())
      *         boerseService.verkaufe(konto, aktie, anzahl)
      *         depot.remove(aktie.getName())  // oder depot.put(..., 0)
      *         log.info("verkauft")
-     *
+     * <p>
      *     ELSE:
      *         log.info("halten")
      * ```
-     *
+     * <p>
      * HERAUSFORDERUNG:
      * - Mehrere Aktien handeln? Schreib eine Loop über eine Liste von Aktien
      * - Nur teilweise verkaufen? Dann depot.put(name, verbleibende_anzahl)
@@ -283,9 +283,9 @@ public class HandelsRoboter {
 
     /**
      * Handelt mit mehreren Aktien in einer Handelssession
-     *
+     * <p>
      * Diese Methode ruft handleAnEinemTag(...) für jede Aktie auf.
-     *
+     * <p>
      * AUFGABE:
      * 1. Nimm eine Liste von Aktien als Parameter
      * 2. Iteriere über alle Aktien
@@ -303,15 +303,15 @@ public class HandelsRoboter {
 
     /**
      * Berechnet den aktuellen Vermögenswert des Roboters
-     *
+     * <p>
      * FORMEL:
      * GesamtVermögen = Guthaben + (Wert aller Aktien im Depot)
-     *
+     * <p>
      * Um Aktienwert zu berechnen:
      * - Für jede Aktie im Depot: anzahl * aktuelle_preis
      * - Die aktuelle_preis kannst du über KursService ermitteln
      *   (Oder: Speichere die Aktien-Objekte selbst, nicht nur Namen)
-     *
+     * <p>
      * AUFGABE:
      * 1. Starte mit guthaben = konto.getKontostand()
      * 2. Für jedes Aktien-Paar im Depot:
@@ -319,7 +319,7 @@ public class HandelsRoboter {
      *    - Berechne Wert = anzahl * aktuelle_preis
      *    - Addiere zu guthaben
      * 3. Gib gesamtVermögen zurück
-     *
+     * <p>
      * HERAUSFORDERUNG: Wie speicherst du die Aktien selbst?
      * Option 1: Zweite Map<String, Aktie> depot_objekte
      * Option 2: Aktienliste als Parameter übergeben
@@ -334,7 +334,7 @@ public class HandelsRoboter {
 
     /**
      * Gibt einen Status-Bericht des Roboters aus
-     *
+     * <p>
      * Format:
      * ```
      * ═══════════════════════════════════════════

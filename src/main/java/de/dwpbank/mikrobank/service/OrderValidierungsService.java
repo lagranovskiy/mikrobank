@@ -9,11 +9,11 @@ public class OrderValidierungsService {
 
     /**
      * Validiert eine Kauforder.
-     *
+     * <p>
      * Fachliche Regeln:
      * - Die Aktie darf nicht null sein
      * - Die Menge muss größer als 0 sein
-     *
+     * <p>
      * Technische Regeln:
      * - Jede Prüfung wird mit DEBUG geloggt
      * - Bei ungültiger Order wird eine IllegalArgumentException geworfen
@@ -32,7 +32,7 @@ public class OrderValidierungsService {
 
     /**
      * Validiert eine Verkaufsorder.
-     *
+     * <p>
      * Fachliche Regeln:
      * - Die Aktie darf nicht null sein
      * - Die Menge muss größer als 0 sein

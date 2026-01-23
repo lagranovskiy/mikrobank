@@ -10,12 +10,12 @@ public class PreisService {
 
     /**
      * Ermittelt den aktuellen Preis einer Aktie.
-     *
+     * <p>
      * Fachliche Regeln:
      * - Der Basispreis ist der aktuelle Preis der Aktie
      * - Der Preis verändert sich zufällig um maximal ±5 %
      * - Der neue Preis darf niemals <= 0 sein
-     *
+     * <p>
      * Technische Regeln:
      * - Vor der Berechnung wird der alte Preis geloggt
      * - Nach der Berechnung wird der neue Preis geloggt

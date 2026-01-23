@@ -30,11 +30,11 @@ public class BoerseService {
      * 3. Der Gesamtpreis (Preis * Menge) wird berechnet
      * 4. Es wird geprüft, ob das Konto ausreichend gedeckt ist
      * 5. Der Betrag wird vom Konto abgebucht
-     *
+     * <p>
      * Fehlerfälle:
      * - Ungültige Order → IllegalArgumentException
      * - Nicht genug Guthaben → IllegalStateException
-     *
+     * <p>
      * Technische Regeln:
      * - Jeder Schritt wird geloggt
      * - Bei Fehlern wird ein ERROR-Log geschrieben
@@ -58,18 +58,18 @@ public class BoerseService {
 
     /**
      * Führt einen Aktienverkauf aus.
-     *
+     * <p>
      * Fachlicher Ablauf:
      * 1. Die Verkaufsorder wird validiert
      * 2. Der aktuelle Aktienpreis wird ermittelt (mit Marktfluktuation)
      * 3. Der Gesamterlös (Preis * Menge) wird berechnet
      * 4. Der Erlös wird auf das Konto eingezahlt
      * 5. Der neue Preis wird im KursService gespeichert
-     *
+     * <p>
      * Fehlerfälle:
      * - Ungültige Order → IllegalArgumentException
      * - Kein Depot/Aktie vorhanden → wird später vom Roboter gehandhabt
-     *
+     * <p>
      * Technische Regeln:
      * - Jeder Schritt wird geloggt
      * - Der KursService wird aktualisiert

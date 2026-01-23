@@ -6,17 +6,17 @@ import java.util.*;
 
 /**
  * Service zur Verwaltung und Analyse von Aktienkursen.
- *
+ * <p>
  * Der KursService verwaltet die Kurshistorie von Aktien und stellt dem Handelsroboter
  * (BörsenRoboter) Analysefunktionen zur Verfügung, um intelligente Kauf- und Verkaufsentscheidungen
  * zu treffen.
- *
+ * <p>
  * Fachliche Aufgaben:
  * 1. Speichert Kurshistorie für jede Aktie
  * 2. Berechnet Durchschnittskurse und Trends
  * 3. Erkennt Hochs und Tiefs
  * 4. Hilft dem Roboter bei der Entscheidungsfindung
- *
+ * <p>
  * Beispiel:
  * - Wenn der aktuelle Kurs deutlich unter dem Durchschnitt liegt → KAUFSIGNAL
  * - Wenn der aktuelle Kurs deutlich über dem Durchschnitt liegt → VERKAUFSSIGNAL
@@ -36,10 +36,10 @@ public class KursService {
 
     /**
      * Registriert einen neuen Kurs für eine Aktie in der Historie.
-     *
+     * <p>
      * Diese Methode wird nach jedem Kauf/Verkauf aufgerufen, um den neuen Preis
      * in der Kurshistorie zu speichern.
-     *
+     * <p>
      * Geschäftsregeln:
      * - Der Kurs muss > 0 sein
      * - Die Historie wird begrenzt auf MAX_KURSHISTORIE Einträge
@@ -72,9 +72,9 @@ public class KursService {
 
     /**
      * Berechnet den Durchschnittskurs einer Aktie basierend auf der Historie.
-     *
+     * <p>
      * Formel: Durchschnitt = Summe aller Kurse / Anzahl der Kurse
-     *
+     * <p>
      * Verwendungsfall: Der Roboter kann damit erkennen, ob ein aktueller Kurs
      * günstig (unter Durchschnitt) oder teuer (über Durchschnitt) ist.
      *
@@ -99,7 +99,7 @@ public class KursService {
 
     /**
      * Bestimmt den Trend einer Aktie.
-     *
+     * <p>
      * Logik:
      * - STEIGEND: Durchschnitt der letzten 5 Kurse > Durchschnitt der 5 davor
      * - FALLEND: Durchschnitt der letzten 5 Kurse < Durchschnitt der 5 davor
@@ -143,7 +143,7 @@ public class KursService {
 
     /**
      * Gibt die bisherige Kurshistorie einer Aktie zurück.
-     *
+     * <p>
      * Diese Methode ist nützlich für Debugging und Analyse.
      *
      * @param aktieName der Name der Aktie
@@ -156,9 +156,9 @@ public class KursService {
 
     /**
      * Berechnet die prozentuale Abweichung des aktuellen Kurses vom Durchschnitt.
-     *
+     * <p>
      * Formel: ((aktueller Kurs - Durchschnitt) / Durchschnitt) * 100
-     *
+     * <p>
      * Interpretation:
      * - +10% bedeutet: Kurs ist 10% über dem Durchschnitt (teuer)
      * - -10% bedeutet: Kurs ist 10% unter dem Durchschnitt (günstig)
@@ -182,11 +182,11 @@ public class KursService {
 
     /**
      * Prüft, ob eine Aktie gerade günstig ist (unter Durchschnitt - Toleranz).
-     *
+     * <p>
      * Ein Kurs ist "günstig", wenn:
      * - Er unter dem Durchschnitt liegt
      * - UND mindestens 5% unter dem Durchschnitt ist
-     *
+     * <p>
      * Diese Methode wird vom BörsenRoboter genutzt, um Kaufsignale zu erkennen.
      *
      * @param aktie die zu prüfende Aktie
@@ -204,11 +204,11 @@ public class KursService {
 
     /**
      * Prüft, ob eine Aktie gerade teuer ist (über Durchschnitt + Toleranz).
-     *
+     * <p>
      * Ein Kurs ist "teuer", wenn:
      * - Er über dem Durchschnitt liegt
      * - UND mindestens 5% über dem Durchschnitt ist
-     *
+     * <p>
      * Diese Methode wird vom BörsenRoboter genutzt, um Verkaufssignale zu erkennen.
      *
      * @param aktie die zu prüfende Aktie

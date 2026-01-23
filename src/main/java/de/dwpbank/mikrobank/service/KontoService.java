@@ -9,12 +9,12 @@ public class KontoService {
 
     /**
      * Zahlt einen Betrag auf das Konto ein.
-     *
+     * <p>
      * Fachliche Regeln:
      * - Der Betrag muss größer als 0 sein
      * - Bei einem ungültigen Betrag wird eine IllegalArgumentException geworfen
      * - Bei erfolgreicher Einzahlung erhöht sich der Kontostand um den Betrag
-     *
+     * <p>
      * Technische Regeln:
      * - Vor der Einzahlung wird ein INFO-Log geschrieben
      * - Nach der Einzahlung wird der neue Kontostand geloggt
@@ -32,11 +32,11 @@ public class KontoService {
 
     /**
      * Zahlt einen Betrag vom Konto aus.
-     *
+     * <p>
      * Fachliche Regeln:
      * - Der Betrag muss größer als 0 sein
      * - Der Kontostand darf nach der Auszahlung nicht negativ sein
-     *
+     * <p>
      * Technische Regeln:
      * - Vor der Auszahlung wird der aktuelle Kontostand geloggt
      * - Nach der Auszahlung wird der neue Kontostand geloggt

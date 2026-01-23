@@ -3,18 +3,18 @@ package de.dwpbank.mikrobank.model;
 
 /**
  * Repräsentiert ein Bankkonto eines Kunden.
- *
+ * <p>
  * Fachliche Bedeutung:
  * - Ein Konto besitzt einen aktuellen Kontostand
  * - Der Kontostand beschreibt das verfügbare Guthaben in Euro
- *
+ * <p>
  * Wichtige Design-Entscheidungen:
  * - Diese Klasse enthält KEINE Geschäftslogik
  * - Es gibt hier keine Prüfungen auf negative Beträge
  * - Fachliche Regeln werden ausschließlich in Services umgesetzt
- *
+ * <p>
  * Beispiel:
- * Ein- und Auszahlungen werden über den {@link boerse.KontoService} durchgeführt.
+ * Ein- und Auszahlungen werden über den {@link de.dwpbank.mikrobank.service.KontoService} durchgeführt.
  */
 public class Konto {
 

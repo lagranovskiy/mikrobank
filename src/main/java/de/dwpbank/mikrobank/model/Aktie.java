@@ -14,7 +14,7 @@ package de.dwpbank.mikrobank.model;
  * - Preisänderungen erfolgen ausschließlich über Services
  *
  * Beispiel:
- * Der aktuelle Marktpreis wird über den {@link boerse.PreisService}
+ * Der aktuelle Marktpreis wird über den {@link de.dwpbank.mikrobank.service.PreisService}
  * neu berechnet und in dieser Klasse gespeichert.
  */
 public class Aktie {
