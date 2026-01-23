@@ -2,8 +2,8 @@
 
 > Ein praktisches Lernprogramm für Schüler (ab 9. Klasse) zur Einführung in professionelle Java-Entwicklung mit einer realistischen Mini-Börse.
 
-**Zeitrahmen:** 2 Wochen (10 Arbeitstage)  
-**Zielgruppe:** Anfänger in Java (aber mit Grundkenntnissen)  
+**Zeitrahmen:** 2 Wochen (10 Arbeitstage)
+**Zielgruppe:** Anfänger in Java (aber mit Grundkenntnissen)
 **Schwierigkeitsgrad:** ⭐⭐⭐ (Einsteigerfreundlich bis mittelschwer)
 
 ---
@@ -34,7 +34,7 @@ Schreibe Tests für einen neuen KI-Service (Börsen-Roboter), finde Bugs, und er
 
 ## 🗓️ Tag 1 (Montag) - Projekt-Setup & Verstehen
 
-**⏱️ Zeitaufwand:** 3-4 Stunden  
+**⏱️ Zeitaufwand:** 3-4 Stunden
 **🎯 Lernziele:** Projekt struktur verstehen, IDE aufsetzen, erste Tests laufen lassen
 
 ### 📋 Aufgaben
@@ -55,7 +55,7 @@ mvn clean test
 - [ ] Markiere dir in einer Datei: Wieviele Tests müssen noch grün werden?
 
 #### 3. Eine Test-Datei durchlesen (1-2 Stunden)
-- [ ] Öffne `src/test/java/de/dwpbank/mikrobank/KontoServiceTest.java`
+- [ ] Öffne `src/test/java/de/dwpbank/mikrobank/service/KontoServiceTest.java`
 - [ ] Lese den Test `einzahlenErhoehtKontostand()` ganz genau
 - [ ] Verstehe das AAA-Pattern:
   - **Arrange** (Vorbereitung): Was wird aufgebaut?
@@ -85,7 +85,7 @@ Beantworte diese Fragen (schreib die Antworten auf):
 
 ## 🗓️ Tag 2 (Dienstag) - KontoService implementieren
 
-**⏱️ Zeitaufwand:** 4 Stunden  
+**⏱️ Zeitaufwand:** 4 Stunden
 **🎯 Lernziele:** Exception-Handling, Geschäftslogik schreiben, Tests debuggen
 
 ### 📋 Aufgaben
@@ -139,7 +139,7 @@ mvn test -Dtest=KontoServiceTest#einzahlenMitNegativemBetragWirftException
 
 > **"Welche Exception werfe ich?"** Die Test-Dateien verwenden `IllegalArgumentException`. Das ist die Norm für ungültige Eingaben in Java.
 
-> **"Mein Test schlägt fehl. Was tun?"** 
+> **"Mein Test schlägt fehl. Was tun?"**
 > 1. Lese die Fehlermeldung genau
 > 2. Vergleiche: Was erwartet der Test? Was macht dein Code?
 > 3. Debugge Schritt für Schritt
@@ -154,7 +154,7 @@ mvn test -Dtest=KontoServiceTest#einzahlenMitNegativemBetragWirftException
 
 ## 🗓️ Tag 3 (Mittwoch) - OrderValidierungsService implementieren
 
-**⏱️ Zeitaufwand:** 3 Stunden  
+**⏱️ Zeitaufwand:** 3 Stunden
 **🎯 Lernziele:** Ähnliche Strukturen erkennen, Code-Duplikation vermeiden
 
 ### 📋 Aufgaben
@@ -200,7 +200,7 @@ public void validiereKauf(Aktie aktie, int menge) {
 
 ## 🗓️ Tag 4 (Donnerstag) - PreisService implementieren
 
-**⏱️ Zeitaufwand:** 3-4 Stunden  
+**⏱️ Zeitaufwand:** 3-4 Stunden
 **🎯 Lernziele:** Zufallszahlen, Mathematik in Java, Objekt-Zustand ändern
 
 ### 📋 Aufgaben
@@ -263,7 +263,7 @@ Falls Tests fehlschlagen:
 
 ## 🗓️ Tag 5 (Freitag) - BoerseService implementieren
 
-**⏱️ Zeitaufwand:** 4-5 Stunden  
+**⏱️ Zeitaufwand:** 4-5 Stunden
 **🎯 Lernziele:** Orchestrierung, Services zusammensetzen, größere Geschäftslogik, Service-Integration
 
 ### 📋 Aufgaben
@@ -283,27 +283,27 @@ Falls Tests fehlschlagen:
 ```java
 public void kaufe(Konto konto, Aktie aktie, int menge) {
     log.info("Starten Kauforder...");
-    
+
     // 1. Validierung
     validierungsService.validiereKauf(aktie, menge);
-    
+
     // 2. Preis ermitteln
     double preis = preisService.ermittleAktuellenPreis(aktie);
-    
+
     // 3. Gesamtkosten berechnen
     double gesamtkosten = preis * menge;
-    
+
     // 4. Guthaben prüfen
     if (konto.getKontostand() < gesamtkosten) {
         // Fehler!
     }
-    
+
     // 5. Abbuchen
     kontoService.auszahlen(konto, gesamtkosten);
-    
+
     // 6. NEUER SCHRITT: Speichere den Kurs!
     kursService.speichereKurs(aktie);
-    
+
     log.info("Kauforder erfolgreich!");
 }
 ```
@@ -331,6 +331,116 @@ public void kaufe(Konto konto, Aktie aktie, int menge) {
 - [ ] Das bedeutet: Der aktuelle Preis der Aktie wird in der Kurshistorie gespeichert
 - [ ] Der KursService kann dann später von BörsenRoboter für intelligente Entscheidungen genutzt werden
 
+#### 6. BoerseService für Market-Simulation erweitern (1-2 Stunden) - NEU!
+
+**🎓 Wichtig:** Diese Methoden sind ZUSÄTZLICH zu `kaufe()` & `verkaufe()` notwendig!
+
+Die Börse muss **UNABHÄNGIG** vom Roboter Preise simulieren und Marktdaten bereitstellen.
+
+Implementiere folgende 4 neue Methoden:
+
+##### 6.1 `notiereAktie(Aktie aktie)` - Aktie registrieren
+```java
+/**
+  - Registriert eine neue Aktie für den Handel an der Börse.
+  - Diese Methode wird zu Beginn aufgerufen, um alle handelbaren Aktien zu registrieren.
+ */
+public void notiereAktie(Aktie aktie) {
+    // TODO: Speichere die Aktie in einer List oder Map
+    // Die Börse braucht ein Verzeichnis aller Aktien
+    if (aktie == null) {
+        throw new IllegalArgumentException("Aktie darf nicht null sein!");
+    }
+    // Speichern in z.B. aktienListe
+}
+```
+
+**Warum?** Der Roboter braucht eine Liste mit allen verfügbaren Aktien!
+
+##### 6.2 `gibAlleAktien()` - Alle Aktien mit aktuellen Kursen zurückgeben
+```java
+/**
+  - Gibt alle registrierten Aktien mit ihren AKTUELLEN Kursen zurück.
+  - Diese Methode wird von HandelsRoboter aufgerufen um den Marktstand zu sehen.
+ */
+public List<Aktie> gibAlleAktien() {
+    // TODO: Gebe die Liste aller registrierten Aktien zurück
+    // Die Kurse sind in den Aktie-Objekten gespeichert!
+    return aktienListe;  // oder new ArrayList<>(aktienListe)
+}
+```
+
+**Warum?** Der Roboter ruft diese Methode auf und sieht alle aktuellen Preise!
+
+##### 6.3 `simuliereHandelsrunde()` - Preise ändern ±5%
+```java
+/**
+  - Simuliert EINE Markt-Runde: Alle Kurse ändern sich zufällig ±5%.
+  - Dies ist UNABHÄNGIG von jedem Roboter - die Börse agiert eigenständig!
+ */
+public void simuliereHandelsrunde() {
+    // TODO: Für JEDE Aktie in aktienListe:
+    // 1. Erzeuge eine Zufallszahl zwischen -5% und +5%
+    // 2. Berechne: neuerPreis = aktuellerPreis * (1 + zufallsZahl)
+    // 3. Setze neuen Preis mit aktie.setPreis(neuerPreis)
+
+    // Beispiel-Logik:
+    for (Aktie aktie : aktienListe) {
+        double zufall = (Math.random() * 0.1) - 0.05;  // -5% bis +5%
+        double neuerPreis = aktie.getPreis() * (1 + zufall);
+        aktie.setPreis(neuerPreis);
+    }
+}
+```
+
+**Warum?** Der Markt ändert sich realistisch! Das macht die Simulation interessant!
+
+##### 6.4 `gibMarktbericht()` - Aktuelle Marktlage zurückgeben
+```java
+/**
+  - Gibt einen Text-Bericht über die aktuelle Marktlage.
+  - Zeigt alle Aktien mit ihren Kursen - nützlich für Debugging!
+ */
+public String gibMarktbericht() {
+    // TODO: Baue einen String zusammen mit allen Aktien & Kursen
+
+    // Beispiel-Output:
+    // "═══ MARKTBERICHT ═══
+    //  Apple:  € 102.50
+    //  BMW:    €  47.30
+    //  SAP:    €  81.99
+    //  ════════════════"
+
+    StringBuilder sb = new StringBuilder();
+    sb.append("═══ MARKTBERICHT ═══\n");
+    for (Aktie aktie : aktienListe) {
+        sb.append(String.format("  %s: €%.2f\n", aktie.getName(), aktie.getPreis()));
+    }
+    sb.append("════════════════\n");
+    return sb.toString();
+}
+```
+
+**Warum?** Debugging und Show, was los ist!
+
+---
+
+**Zusammenhang dieser 4 Methoden:**
+
+```
+Boersensimulator (später):
+  1. Starts: Börse.notiereAktie(apple, bmw, sap)
+  2. Runde 1: Börse.simuliereHandelsrunde()  ← Preise ändern sich!
+  3. Roboter sieht: Börse.gibAlleAktien()  ← Aktuelle Preise
+  4. Roboter handelt: Börse.kaufe() oder verkaufe()
+  5. Anzeige: Börse.gibMarktbericht()  ← Marktstand für Nutzer
+  6. Runde 2: zurück zu Punkt 2...
+```
+
+- [ ] Implementiere alle 4 Methoden
+- [ ] Teste mit: `mvn test -Dtest=BoerseServiceTest`
+- [ ] Verifiziere: Die neuen Methoden müssen mit `kaufe()` und `verkaufe()` zusammenarbeiten!
+
 ### 💡 Tipps
 
 > **"Die Validierung wirft eine Exception - ist das ok?"** JA! Das ist ein Feature. Wenn `validiereKauf()` eine Exception wirft, wird die `kaufe()`-Methode gestoppt.
@@ -338,6 +448,12 @@ public void kaufe(Konto konto, Aktie aktie, int menge) {
 > **"Wo speichere ich den Kurs?"** Mit: `kursService.speichereKurs(aktie)` - Das ist eine neue Zeile!
 
 > **"Warum speichere ich den Kurs?"** Damit hat der KursService eine Historien aller Kurse. Der Handelsroboter nutzt diese später zur Analyse!
+
+> **"Was ist der Unterschied zwischen den 4 neuen Methoden?"**
+> - `notiereAktie()`: Setup (einmalig)
+> - `gibAlleAktien()`: Daten lesen (oft)
+> - `simuliereHandelsrunde()`: Markt ändern (jede Runde)
+> - `gibMarktbericht()`: Anzeige (Debugging/UI)
 
 ### ✅ Checkpoint - WOCHE 1 ABSCHLUSS
 
@@ -349,14 +465,19 @@ mvn test
 **Ziel:** Alle Tests sollten grün sein! 🎉
 
 Zähle die Tests:
-- KontoServiceTest: 11 ✅
-- PreisServiceTest: 8 ✅
+- KontoServiceTest: 15 ✅
+- PreisServiceTest: 7 ✅
 - OrderValidierungsServiceTest: 14 ✅
-- BoerseServiceTest: 18 ✅
-- **TOTAL: 51 Tests** ✅
+- BoerseServiceTest: 22 ✅ (mit neuen 4 Methoden)
+- KursServiceTest: 13 ✅ (neu hinzugefügt)
+- AktieTest: 18 ✅ (Reference Tests für Model)
+- KontoTest: 10 ✅ (Reference Tests für Model)
+- **TOTAL: 99 Tests in Woche 1** ✅
 
 Falls nicht alle grün sind:
 1. Welche schlagen fehl?
+2. Lies die Fehlermeldung genau
+3. Nutze Debugger oder Log-Ausgaben
 2. Lies die Fehlermeldung
 3. Frag einen Mentor oder debugge selbst
 
@@ -374,15 +495,129 @@ Falls nicht alle grün sind:
 
 ---
 
-## 🗓️ Tag 6 (Montag) - BörsenRoboter/HandelsRoboter verstehen & Tests erweitern
+## 🗓️ Tag 6 (Montag) - KursService Unit Tests schreiben (TDD-Training)
 
-**⏱️ Zeitaufwand:** 4-5 Stunden  
+**⏱️ Zeitaufwand:** 3-4 Stunden
+**🎯 Lernziele:** Test-Driven Development (TDD), Verträge verstehen, eigenständig Tests schreiben
+
+### 📋 Aufgaben
+
+#### 1. KursServiceTest Rumpf kennenlernen (30 Minuten)
+- [ ] Öffne `src/test/java/de/dwpbank/mikrobank/service/KursServiceTest.java`
+- [ ] Es ist noch nicht fertig! Nur ein **Rumpf** (Skeleton) mit leeren Test-Methoden
+- [ ] Jede Test-Methode hat:
+  - ✅ **Javadoc-Erklärung**: Was soll getestet werden?
+  - ✅ **VERTRAG (Contract)**: Exact Anforderung aus der Implementierung
+  - ✅ **BEDINGUNGEN**: Was muss vorher der Fall sein?
+  - ✅ **ERWARTET**: Was sollte nach dem Test passieren?
+  - ✅ **BEISPIEL**: Konkretes Code-Beispiel zum Nachahmen
+  - ❌ **KEINE IMPLEMENTIERUNG**: Die musst du schreiben!
+
+#### 2. Vertrag verstehen (1 Stunde)
+- [ ] Öffne `src/main/java/de/dwpbank/mikrobank/service/KursService.java`
+- [ ] Lese die Javadoc und Kommentare für jede Methode:
+  - `speichereKurs(Aktie)`: Speichert Preis, validiert > 0, max 100 Einträge (FIFO)
+  - `berechnetDurchschnittskurs(String)`: (Kurs1+Kurs2+...) / Anzahl, 0.0 wenn leer
+  - `bestimmeTrend(String)`: Vergleicht letzte 5 mit vorherigen 5 Kursen
+  - `gibKursHistorie(String)`: Gibt alle Kurse zurück
+
+#### 3. AAA-Pattern anwenden (30 Minuten)
+Jeder Test folgt diesem Muster:
+
+```java
+@Test
+void meinTest() {
+    // 1. ARRANGE: Vorbereitung der Testdaten
+    Aktie apple = new Aktie("Apple", 100);
+    KursService service = new KursService();
+
+    // 2. ACT: Führe die Methode aus
+    service.speichereKurs(apple);
+
+    // 3. ASSERT: Prüfe das Ergebnis
+    List<Double> kurse = service.gibKursHistorie("Apple");
+    assertEquals(1, kurse.size());
+    assertEquals(100.0, kurse.get(0));
+}
+```
+
+Die 3 Teile sind **IMMER** der gleiche Aufbau!
+
+#### 4. Tests Schritt-für-Schritt implementieren (2 Stunden)
+**REIHENFOLGE (vom einfach zum schwer):**
+
+1. **speichereKurs() Tests** (Start hier!)
+    - `speichereKurs_validerKurs_wirdGespeichert()` - Einfach!
+    - `speichereKurs_nullAktie_werfException()` - Nutze `assertThrows()`
+    - `speichereKurs_negativerPreis_werfException()`
+    - `speichereKurs_mehrerereKurse_werdenGespeichert()`
+
+2. **gibKursHistorie() Tests**
+    - `gibKursHistorie_gespeichertKurse_werden()` - Einfach!
+    - `gibKursHistorie_unbekannteAktie_leereListe()`
+
+3. **berechnetDurchschnittskurs() Tests**
+    - `berechnetDurchschnittskurs_drehKurse_ergebnis()` - Mathematik!
+    - `berechnetDurchschnittskurs_unbekannteAktie_gibt0()`
+    - `berechnetDurchschnittskurs_einKurs_gibtDiesenKursZurueck()`
+
+4. **bestimmeTrend() Tests** (Das schwierigste!)
+    - `bestimmeTrend_steigerndeTrend_gibtSTEIGENDZurueck()` - 10 Kurse speichern!
+    - `bestimmeTrend_fallendenTrend_gibtFALLENDZurueck()`
+    - `bestimmeTrend_stabile_kurse_gibtSTABILZurueck()`
+    - `bestimmeTrend_wenigKurse_gibtUNBEKANNTZurueck()`
+
+**Tipps zum Implementieren:**
+- Kopiere den Code aus der BEISPIEL-Sektion im Javadoc!
+- Nutze `assertEquals()` für Zahlvergleiche (besser als `assertTrue()`)
+- Nutze `assertThrows()` für Exception-Tests
+- Teste immer den "**Happy Path**" (was soll passieren) UND die "**Sad Path**" (Fehler)
+
+#### 5. Tests ausführen und debuggen (30 Minuten)
+```bash
+# Nur KursService Tests
+mvn test -Dtest=KursServiceTest
+
+# Alle Tests (wir sind bei ~115 Tests jetzt)
+mvn test
+```
+
+- [ ] Wie viele Tests sind GRÜN? ✅
+- [ ] Wie viele sind ROT? ❌
+- [ ] Falls Tests fehlschlagen: Lies die Fehler genau und debugge!
+
+### 💡 Tipps
+
+> **"Ich weiß nicht wie ich anfangen soll"** Kopiere den Code aus der Javadoc-BEISPIEL! Dann schreib `assertEquals()` dahinter.
+
+> **"assertEquals() vs assertTrue()?"**
+> - ❌ `assertTrue(kurse.size() == 1)` - Nicht so gut
+> - ✅ `assertEquals(1, kurse.size())` - Besser! (bessere Fehlermeldung)
+
+> **"Was ist MAX_KURSHISTORIE?"** Die Speicherbegrenzung! Nach 100 Kursen werden alte Kurse gelöscht (FIFO). Teste das!
+
+> **"Aber du hast doch gesagt, ich soll... debuggen?"** YES! Setze Breakpoints in der KursService-Implementierung und schau was passiert!
+
+### ✅ Checkpoint
+
+Führe aus:
+```bash
+mvn test -Dtest=KursServiceTest
+```
+
+Alle KursService Tests sollten GRÜN sein! 🎉
+
+---
+
+## 🗓️ Tag 6+ (Dienstag) - BörsenRoboter/HandelsRoboter verstehen & Tests erweitern
+
+**⏱️ Zeitaufwand:** 4-5 Stunden
 **🎯 Lernziele:** TDD, Service-Design, KursService-Integration, Test-Strategie
 
 ### 📋 Aufgaben
 
 #### 1. HandelsRoboter Anforderungen lesen (1 Stunde)
-- [ ] Öffne `src/main/java/de/dwpbank/mikrobank/service/HandelsRoboter.java`
+- [ ] Öffne `src/main/java/de/dwpbank/mikrobank/HandelsRoboter.java`
 - [ ] Lies die LANGE Dokumentation oben in der Klasse!
 - [ ] Verstehe die **Handelslogik**:
   - KAUFEN wenn Kurs günstig ist (KursService.istKursGuenstig())
@@ -435,7 +670,7 @@ Alle Methoden im HandelsRoboter haben "TODO: Implementiere..." Kommentare.
 
 > **"Der Test schlägt fehl, weil der Service nicht existiert"** GENAU! Das ist TDD: Tests schreiben BEVOR man den Code schreibt.
 
-> **"Wie nutzt der Roboter den KursService?"** 
+> **"Wie nutzt der Roboter den KursService?"**
 > ```java
 > if (kursService.istKursGuenstig(aktie)) {
 >     // KAUF-SIGNAL!
@@ -455,7 +690,7 @@ Alle Methoden im HandelsRoboter haben "TODO: Implementiere..." Kommentare.
 
 ## 🗓️ Tag 7 (Dienstag) - HandelsRoboter implementieren (Teil 1)
 
-**⏱️ Zeitaufwand:** 4-5 Stunden  
+**⏱️ Zeitaufwand:** 4-5 Stunden
 **🎯 Lernziele:** Komplexe Logik umsetzen, Tests grün machen, KursService nutzen
 
 ### 📋 Aufgaben
@@ -514,7 +749,7 @@ public void handleAnEinemTag(Aktie aktie) {
     // SCHRITT 2: Hole Kursinformationen
     boolean istGuenstig = kursService.istKursGuenstig(aktie);
     boolean istTeuer = kursService.istKursTeuer(aktie);
-    
+
     double aktuellerPreis = aktie.getPreis();
     double guthaben = konto.getKontostand();
 
@@ -524,7 +759,7 @@ public void handleAnEinemTag(Aktie aktie) {
         int maxMoeglich = (int) (guthaben / aktuellerPreis);
         int maxErlaubt = 10 - gibAnzahlAktien(aktienname);
         int anzahlZuKaufen = Math.min(maxMoeglich, maxErlaubt);
-        
+
         if (anzahlZuKaufen > 0) {
             try {
                 boerseService.kaufe(konto, aktie, anzahlZuKaufen);
@@ -568,7 +803,7 @@ Implementiere die Stubs für:
 
 > **"Math.min() Funktion?"** `Math.min(5, 10)` gibt 5 zurück. Perfekt um Maxima zu begrenzen!
 
-> **"Wie nutze ich KursService?"** 
+> **"Wie nutze ich KursService?"**
 > ```java
 > kursService.istKursGuenstig(aktie)  // boolean
 > kursService.istKursTeuer(aktie)     // boolean
@@ -588,7 +823,7 @@ Implementiere die Stubs für:
 
 ## 🗓️ Tag 8 (Mittwoch) - HandelsRoboter implementieren (Teil 2)
 
-**⏱️ Zeitaufwand:** 4-5 Stunden  
+**⏱️ Zeitaufwand:** 4-5 Stunden
 **🎯 Lernziele:** Komplexe Geschäftslogik, Debugging, Depot-Verwaltung
 
 ### 📋 Aufgaben
@@ -600,7 +835,7 @@ Diese Methode iteriert über mehrere Aktien und lässt den Roboter mit jeder han
 ```java
 public void handeleSession(List<Aktie> aktien) {
     log.info("[{}] Starte Handelssession mit {} Aktien", name, aktien.size());
-    
+
     for (Aktie aktie : aktien) {
         try {
             handleAnEinemTag(aktie);
@@ -609,7 +844,7 @@ public void handeleSession(List<Aktie> aktien) {
             // Weitermachen mit nächster Aktie!
         }
     }
-    
+
     log.info("[{}] Handelssession beendet. Guthaben: {}€", name, konto.getKontostand());
 }
 ```
@@ -639,11 +874,11 @@ private Map<String, Aktie> depot_objekte = new HashMap<>();  // NEU
 
 public void handleAnEinemTag(Aktie aktie) {
     // ... bestehender Code ...
-    
+
     // Bei Kauf:
     depot.put(aktienname, gibAnzahlAktien(aktienname) + anzahlZuKaufen);
     depot_objekte.put(aktienname, aktie);  // NEU: Speichere die Aktie
-    
+
     // Bei Verkauf:
     depot.remove(aktienname);
     depot_objekte.remove(aktienname);  // NEU: Entferne die Aktie
@@ -651,7 +886,7 @@ public void handleAnEinemTag(Aktie aktie) {
 
 public double berechnetGesamtvermoegen() {
     double vermogen = konto.getKontostand();
-    
+
     for (String aktienname : depot.keySet()) {
         int anzahl = depot.get(aktienname);
         Aktie aktie = depot_objekte.get(aktienname);
@@ -660,7 +895,7 @@ public double berechnetGesamtvermoegen() {
             vermogen += wert;
         }
     }
-    
+
     return vermogen;
 }
 ```
@@ -680,16 +915,16 @@ public String gibStatus() {
     sb.append("═══════════════════════════════════════════\n");
     sb.append("Guthaben: ").append(konto.getKontostand()).append("€\n");
     sb.append("Depot: ").append(depot.size()).append(" verschiedene Aktien\n");
-    
+
     for (String aktienname : depot.keySet()) {
         int anzahl = depot.get(aktienname);
         sb.append("  - ").append(aktienname).append(": ").append(anzahl).append(" Stück\n");
     }
-    
+
     double vermoegen = berechnetGesamtvermoegen();
     sb.append("Gesamtvermögen: ").append(vermoegen).append("€\n");
     sb.append("═══════════════════════════════════════════\n");
-    
+
     return sb.toString();
 }
 ```
@@ -734,7 +969,7 @@ mvn test -Dtest=HandelsRoboterTest
 
 ## 🗓️ Tag 9 (Donnerstag) - Code-Review & Edge Cases
 
-**⏱️ Zeitaufwand:** 3-4 Stunden  
+**⏱️ Zeitaufwand:** 3-4 Stunden
 **🎯 Lernziele:** Systematisches Debugging, Code-Qualität, Mentor-Feedback
 
 ### 📋 Aufgaben
@@ -793,14 +1028,113 @@ mvn test -Dtest=HandelsRoboterTest
 
 ---
 
-## 🗓️ Tag 10 (Freitag) - Zusammenfassung & Präsentation
+## 🗓️ Tag 10 (Freitag) - Boersensimulator: Integration & Live-Demo
 
-**⏱️ Zeitaufwand:** 3-4 Stunden  
-**🎯 Lernziele:** Reflection, Kommunikation, Dokumentation
+**⏱️ Zeitaufwand:** 3-4 Stunden
+**🎯 Lernziele:** System-Integration, End-to-End-Testing, Live-Demonstration
 
 ### 📋 Aufgaben
 
-#### 1. Abschließender Test-Run (30 Minuten)
+#### 1. Verstehe die Boersensimulator-Architektur (30 Minuten)
+- [ ] Öffne `src/main/java/de/dwpbank/mikrobank/Boersensimulator.java`
+- [ ] Lese die Datei ganz durch
+- [ ] Verstehe den Ablauf:
+  1. **Börse (BoerseService)**: Simuliert unabhängig Preisänderungen (±5%)
+  2. **Roboter (HandelsRoboter)**: Reagiert auf aktuelle Preise
+  3. **Interaktion**: Scanner-Input wartet auf "Enter" vor jeder Runde
+  4. **Statistiken**: Zeigt Vermögen und Aktienbestand
+
+#### 2. Starte die Live-Demo (1 Stunde)
+```bash
+# Baue erst das Projekt
+mvn clean package
+
+# Starte die Boersensimulator-Demo
+mvn exec:java -Dexec.mainClass="de.dwpbank.mikrobank.Boersensimulator"
+```
+
+**Was passiert:**
+- Börse zeigt aktuellen Marktstand
+- Roboter macht eine Handelsdecision (Kauf/Verkauf/Halten)
+- Dein Input: Drücke ENTER für nächste Runde
+- Nach 10 Runden: Finale Statistiken
+
+**Aufgaben während der Demo:**
+- [ ] Simuliere mindestens 10 Handelsrunden
+- [ ] Beobachte wie der Roboter reagiert:
+  - Kauft er wenn Kurse fallen? ✅
+  - Verkauft er wenn Kurse steigen? ✅
+  - Haelt er Position in stabilen Phasen? ✅
+- [ ] Schreib auf:
+  - Startvermoegen: ?
+  - Endvermoegen: ?
+  - Gewinn/Verlust: ?
+  - Handelsrunden: ?
+
+#### 3. Code-Review: Boersensimulator & Integration (1 Stunde)
+- [ ] Schau auf die Methode `simuliereEineRunde()` in Boersensimulator
+- [ ] Wie wird die Börse aktualisiert?
+  - Welche Methode von BoerseService wird aufgerufen?
+  - Was macht `simuliereHandelsrunde()`?
+
+- [ ] Wie reagiert der Roboter?
+  - Welche Methode von HandelsRoboter wird aufgerufen?
+  - Was macht `handeleSession()`?
+
+- [ ] Trace den kompletten Ablauf:
+  ```
+  simuliereEineRunde()
+    ├─ boerse.simuliereHandelsrunde()
+    │  └─ Alle Kurse ±5% ändern
+    ├─ roboter.handeleSession(boerse.gibAlleAktien())
+    │  ├─ Für jede Aktie: Trend analysieren
+    │  ├─ KursService nutzen
+    │  ├─ Kauf/Verkauf-Decision treffen
+    │  └─ BoerseService.kaufe() oder verkaufe() aufrufen
+    └─ Statistiken anzeigen
+  ```
+
+#### 4. Fehlerbehandlung testen (30 Minuten)
+Versuche absichtlich Fehler zu provozieren:
+
+- [ ] **Nicht genug Guthaben**: Versuche zu viele Aktien zu kaufen
+  - Was passiert? Exception?
+  - Der Roboter sollte das handhaben!
+
+- [ ] **Aktie nicht im Depot**: Versuche zu viel zu verkaufen
+  - Was zeigt der Status?
+
+- [ ] **Kurshistorie zu kurz**: In der ersten Runde
+  - Der KursService hat noch keine Daten
+  - Was macht der Roboter?
+
+### 💡 Tipps
+
+> **"Der Simulator crashed!"** Likely ist der HandelsRoboter noch nicht vollständig implementiert. Das ist ok für dieses Praktikum. Schau in die Logs!
+
+> **"Der Roboter handelt nie!"** Prüfe ob `handeleSession()` richtig implementiert ist. Der Roboter sollte mindestens einmal kaufen in 10 Runden.
+
+> **"Ich sehe keine Logs!"** Die Boersensimulator nutzt SLF4J. Schau in der Konsole nach.
+
+### ✅ Checkpoint - WOCHE 2 Hälfte
+
+Beantworte folgende Fragen:
+
+1. **Start → Ende Vermögen**: Wie hat sich das Vermögen entwickelt? Gewinn oder Verlust?
+2. **Depot**: Welche Aktien hält der Roboter am Schluss?
+3. **Service-Integration**: Welche Services arbeiten zusammen?
+4. **Fehler gefunden**: Gibt es noch Bugs?
+
+---
+
+## 🗓️ Tag 10+ (Bonus) - Zusammenfassung & Dokumentation
+
+**⏱️ Zeitaufwand:** 2-3 Stunden
+**🎯 Lernziele:** Reflexion, Dokumentation, Kommunikation
+
+### 📋 Aufgaben
+
+#### 1. Abschließender Test-Run (20 Minuten)
 ```bash
 mvn clean test
 ```
@@ -809,18 +1143,18 @@ mvn clean test
 - [ ] Wie viel Prozent sind grün?
 - [ ] **Ziel: 100%!** 🎉
 
-#### 2. Javadoc-Kommentare verbessern (1 Stunde)
+#### 2. Javadoc-Kommentare verbessern (45 Minuten)
 - [ ] Schreib Javadoc-Kommentare für `HandelsRoboter`
 - [ ] Erkläre die "Intelligenz" in den Kommentaren
 - [ ] Beispiel (wenn noch nicht vorhanden):
 ```java
 /**
- * Handelt mit einer Aktie an einem Tag.
- * 
- * Logik: 
- * - Kaufe wenn kursService.istKursGuenstig() = true
- * - Verkaufe wenn kursService.istKursTeuer() = true
- * - Halte sonst Position
+  - Handelt mit einer Aktie an einem Tag.
+ *
+  - Logik:
+  - - Kaufe wenn kursService.istKursGuenstig() = true
+  - - Verkaufe wenn kursService.istKursTeuer() = true
+  - - Halte sonst Position
  */
 public void handleAnEinemTag(Aktie aktie) { ... }
 ```
@@ -835,24 +1169,25 @@ Schreibe einen "End-to-End" Test, der zeigt wie alles zusammenhängt:
 void integrationTest() {
     // Arrange: Starte mit 10.000€
     HandelsRoboter roboter = new HandelsRoboter("Integration-Bot", 10000);
-    List<Aktie> aktien = Arrays.asList(
-        new Aktie("Apple", 100),
-        new Aktie("BMW", 50),
-        new Aktie("SAP", 80)
-    );
-    
+    BoerseService boerse = new BoerseService();
+
+    // Aktien registrieren
+    boerse.notiereAktie(new Aktie("Apple", 100));
+    boerse.notiereAktie(new Aktie("BMW", 50));
+
     // Act: Eine komplette Handelssession
-    roboter.handeleSession(aktien);
-    
+    roboter.handeleSession(boerse.gibAlleAktien());
+
     // Assert: Roboter sollte jetzt Aktien haben und/oder Gewinn gemacht haben
     double vermoegen = roboter.berechnetGesamtvermoegen();
-    assertTrue(vermoegen > 0);
+    assertTrue(vermoegen >= 10000);  // Mindestens break-even
     System.out.println(roboter.gibStatus());
 }
 ```
 
-- [ ] Schreib diesen Test
+- [ ] Schreib diesen Test (oder einen ähnlichen)
 - [ ] Führe ihn aus und bestaune den Status-Output!
+- [ ] Alle Services arbeiten zusammen! 🎉
 
 #### 4. Lerntagebuch schreiben (1-1,5 Stunden)
 Schreib eine Datei `WOCHE2_ZUSAMMENFASSUNG.md`:
@@ -946,7 +1281,7 @@ Tag 1: Apple 100€ (günstig)
 
 Tag 2: Apple 150€ (teuer)
   → Verkaufe 50x → +7.500€
-  
+
 GEWINN: +2.500€! 📈
 ```
 
@@ -1018,14 +1353,14 @@ mvn help:active-profiles
 
 # 🎓 Was du nach 2 Wochen weißt
 
-✅ Wie man professionelle Java-Services schreibt  
-✅ Exception Handling  
-✅ Unit Tests schreiben und debuggen  
-✅ Test-Driven Development (TDD)  
-✅ Service-oriented Architecture  
-✅ Geschäftslogik in Code umsetzen  
-✅ Debugging-Strategien  
-✅ Code-Review  
+✅ Wie man professionelle Java-Services schreibt
+✅ Exception Handling
+✅ Unit Tests schreiben und debuggen
+✅ Test-Driven Development (TDD)
+✅ Service-oriented Architecture
+✅ Geschäftslogik in Code umsetzen
+✅ Debugging-Strategien
+✅ Code-Review
 
 ---
 

@@ -26,9 +26,20 @@
 
 #### ⚙️ **Service Layer** - Die Geschäftslogik
 - **KontoService**: Verwaltet Einzahlungen und Auszahlungen
-- **PreisService**: Berechnet aktuelle Aktienkurse (mit bis zu ±5% Schwankung)
+- **PreisService**: Berechnet aktuelle Aktienkurse
 - **OrderValidierungsService**: Prüft ob Kauf-/Verkaufsorder gültig sind
-- **BoerseService**: Orchestriert den kompletten Aktienkauf-Prozess
+- **BoerseService**: Orchestriert den kompletten Aktienkauf-/Verkaufsprozess
+
+#### 🤖 **HandelsRoboter** - Automatisierter Trader
+- Intelligenter Trader, der Aktien automatisch kauft und verkauft
+- Nutzt die Services um Entscheidungen zu treffen
+- Verwaltet ein Depot mit gehaltenen Aktien
+
+#### 🎮 **Boersensimulator** - Demo & Visualisierung
+- Interaktives Programm zur Demonstration des gesamten Systems
+- Börse simuliert Kursbewegungen
+- HandelsRoboter reagiert auf die Kurse
+- Ermöglicht es dem Praktikanten zu sehen, wie alles zusammenspielt
 
 ### 2. Ein typisches Aktienkauf-Szenario:
 
@@ -95,38 +106,62 @@ mvn package
 mikrobank/
 ├── src/
 │   ├── main/java/de/dwpbank/mikrobank/
-│   │   ├── model/          # Datenmodelle (Aktie, Konto)
-│   │   └── service/        # Geschäftslogik (Services)
+│   │   ├── model/              # Datenmodelle (Aktie, Konto)
+│   │   ├── service/            # Geschäftslogik (Services)
+│   │   ├── HandelsRoboter.java # Automatisierter Trader
+│   │   └── Boersensimulator.java # Demo-Programm
 │   └── test/java/de/dwpbank/mikrobank/
-│       └── *ServiceTest.java  # Unit Tests (40+ Tests)
-├── pom.xml                 # Maven Konfiguration
-└── README.md              # Diese Datei
+│       ├── model/              # Model Tests (AktieTest, KontoTest)
+│       └── service/            # Service Tests
+├── pom.xml                     # Maven Konfiguration
+├── README.md                   # Diese Datei
+└── PRAKTIKUM_PLAN.md          # Praktikums-Anleitung
 ```
 
 ---
 
 ## 🧪 Unit Tests
 
-Das Projekt enthält über **70 umfangreiche Unit Tests**, die die gesamte Geschäftslogik validieren:
+Das Projekt enthält über **100 umfangreiche Unit Tests**, die die gesamte Geschäftslogik validieren:
 
+- ✅ **Model Tests** (28 Tests) - Datenmodelle validieren
+  - AktieTest (18 Tests) - Aktien-Validierung
+  - KontoTest (10 Tests) - Konto-Validierung
 - ✅ **KontoServiceTest** (15 Tests) - Einzahlungen und Auszahlungen
 - ✅ **PreisServiceTest** (7 Tests) - Preisermittlung
 - ✅ **OrderValidierungsServiceTest** (14 Tests) - Validierung von Kauf/Verkauf
 - ✅ **BoerseServiceTest** (22 Tests) - Kompletter Kauf- und Verkaufsprozess
-- ✅ **HandelsRoboterTest** (19 Tests) - Automatisiertes Handelssystem
+- ✅ **HandelsRoboterTest** (17 Tests) - Automatisiertes Handelssystem
 
 ### Tests ausführen
 
 ```bash
 # Alle Tests
-mvn test
+mvn clean test
 
 # Nur einen Test
 mvn test -Dtest=KontoServiceTest
 
-# Mit DetailoutputInfo
+# Mit Detailoutput
 mvn test -X
 ```
+
+---
+
+## 🎮 Demo-Programm: Boersensimulator
+
+Das Projekt enthält ein interaktives Demo-Programm, das zeigt, wie die gesamte Mini-Börse zusammenspielt:
+
+```bash
+# Simulator starten
+mvn clean compile exec:java -Dexec.mainClass="de.dwpbank.mikrobank.Boersensimulator"
+```
+
+**Was der Simulator macht:**
+- 🏛️ Börse mit 5 Aktien starten
+- 🤖 HandelsRoboter mit 50.000€ Startkapital
+- 📊 Jede Runde: Kurse ändern → Roboter handelt → Status zeigen
+- ⌨️ Enter drücken für nächste Runde, oder 'q' zum Beenden
 
 ---
 
