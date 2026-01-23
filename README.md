@@ -102,6 +102,8 @@ mvn package
 
 ### Struktur
 
+![klassendiagram.png](klassendiagram.png)
+
 ```
 mikrobank/
 ├── src/
