@@ -18,7 +18,7 @@
 
 ## 🎯 Wie funktioniert es?
 
-### 1. Das System hat 4 Komponenten:
+### 1. Das System hat 4 Ebenen:
 
 #### 🏪 **Model Layer** - Die Datenstrukturen
 - **Aktie**: Eine Börsenaktie mit Name und aktuellem Preis
@@ -29,6 +29,7 @@
 - **PreisService**: Berechnet aktuelle Aktienkurse
 - **OrderValidierungsService**: Prüft ob Kauf-/Verkaufsorder gültig sind
 - **BoerseService**: Orchestriert den kompletten Aktienkauf-/Verkaufsprozess
+- **KursService**: Speichert Kurshistorien und analysiert Trends (günstig/teuer)
 
 #### 🤖 **HandelsRoboter** - Automatisierter Trader
 - Intelligenter Trader, der Aktien automatisch kauft und verkauft
@@ -71,7 +72,7 @@ BoerseService boerse = new BoerseService();
 boerse.kaufe(konto, apple, 5);
 
 // Konto hat jetzt weniger Guthaben
-System.out.println(konto.getKontostand()); // ~750 Euro
+System.out.println(konto.getKontostand()); // ~250 Euro
 ```
 
 ---
@@ -124,7 +125,7 @@ mikrobank/
 
 ## 🧪 Unit Tests
 
-Das Projekt enthält über **100 umfangreiche Unit Tests**, die die gesamte Geschäftslogik validieren:
+Das Projekt enthält **118 umfangreiche Unit Tests**, die die gesamte Geschäftslogik validieren:
 
 - ✅ **Model Tests** (28 Tests) - Datenmodelle validieren
   - AktieTest (18 Tests) - Aktien-Validierung
@@ -133,7 +134,7 @@ Das Projekt enthält über **100 umfangreiche Unit Tests**, die die gesamte Gesc
 - ✅ **PreisServiceTest** (7 Tests) - Preisermittlung
 - ✅ **OrderValidierungsServiceTest** (14 Tests) - Validierung von Kauf/Verkauf
 - ✅ **BoerseServiceTest** (22 Tests) - Kompletter Kauf- und Verkaufsprozess
-- ✅ **HandelsRoboterTest** (17 Tests) - Automatisiertes Handelssystem
+- ✅ **HandelsRoboterTest** (19 Tests) - Automatisiertes Handelssystem
 
 ### Tests ausführen
 

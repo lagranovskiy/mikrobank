@@ -19,8 +19,8 @@ Implementiere die Geschäftslogik der Mini-Börse, sodass alle vorbereiteten Uni
 - ✅ Unit Tests verstehen und debuggen
 - ✅ Geschäftslogik in Code umsetzen
 
-### Woche 2: Börsen-Roboter & Test-Driven Development
-Schreibe Tests für einen neuen KI-Service (Börsen-Roboter), finde Bugs, und erweiter das System.
+### Woche 2: HandelsRoboter & Test-Driven Development
+Schreibe Tests für einen neuen KI-Service (HandelsRoboter), finde Bugs, und erweiter das System.
 
 **Lernziele:**
 - ✅ Tests schreiben (Test-Driven Development)
@@ -43,7 +43,7 @@ Schreibe Tests für einen neuen KI-Service (Börsen-Roboter), finde Bugs, und er
 - [ ] README.md ganz durchlesen
 - [ ] Alle Dateien in `src/main/java/de/dwpbank/mikrobank/` durchschauen
 - [ ] Model-Klassen (`Aktie`, `Konto`) verstehen
-- [ ] Die 4 Services (`KontoService`, `PreisService`, etc.) anschauen
+- [ ] Die 5 Services (`KontoService`, `PreisService`, `OrderValidierungsService`, `BoerseService`, `KursService`) anschauen
 
 #### 2. Tests laufen lassen (30 Minuten)
 ```bash
@@ -148,7 +148,7 @@ mvn test -Dtest=KontoServiceTest#einzahlenMitNegativemBetragWirftException
 
 - [ ] Führe folgendes aus: `mvn test -Dtest=KontoServiceTest`
 - [ ] Zähle: Wie viele Tests sind grün?
-- [ ] **Sollte sein:** Alle 11 KontoServiceTest-Tests sollten grün sein ✅
+- [ ] **Sollte sein:** Alle 15 KontoServiceTest-Tests sollten grün sein ✅
 
 ---
 
@@ -257,7 +257,7 @@ Falls Tests fehlschlagen:
 ### ✅ Checkpoint
 
 - [ ] `mvn test -Dtest=PreisServiceTest` → Alle grün?
-- [ ] Zähle: Sollten 8 Tests sein
+- [ ] Zähle: Sollten 7 Tests sein
 
 ---
 
@@ -329,7 +329,7 @@ public void kaufe(Konto konto, Aktie aktie, int menge) {
 #### 5. Integration mit KursService prüfen (30 Minuten)
 - [ ] Nach jedem Kauf/Verkauf sollte `kursService.speichereKurs(aktie)` aufgerufen werden
 - [ ] Das bedeutet: Der aktuelle Preis der Aktie wird in der Kurshistorie gespeichert
-- [ ] Der KursService kann dann später von BörsenRoboter für intelligente Entscheidungen genutzt werden
+- [ ] Der KursService kann dann später vom HandelsRoboter für intelligente Entscheidungen genutzt werden
 
 #### 6. BoerseService für Market-Simulation erweitern (1-2 Stunden) - NEU!
 
@@ -483,7 +483,7 @@ Falls nicht alle grün sind:
 
 ---
 
-# 📅 WOCHE 2: Börsen-Roboter & Testing
+# 📅 WOCHE 2: HandelsRoboter & Testing
 
 ## 🎯 Lernziele Woche 2
 
@@ -578,7 +578,7 @@ Die 3 Teile sind **IMMER** der gleiche Aufbau!
 # Nur KursService Tests
 mvn test -Dtest=KursServiceTest
 
-# Alle Tests (wir sind bei ~115 Tests jetzt)
+# Alle Tests (aktuell sind es 118 Tests)
 mvn test
 ```
 
@@ -609,7 +609,7 @@ Alle KursService Tests sollten GRÜN sein! 🎉
 
 ---
 
-## 🗓️ Tag 6+ (Dienstag) - BörsenRoboter/HandelsRoboter verstehen & Tests erweitern
+## 🗓️ Tag 6+ (Dienstag) - HandelsRoboter verstehen & Tests erweitern
 
 **⏱️ Zeitaufwand:** 4-5 Stunden
 **🎯 Lernziele:** TDD, Service-Design, KursService-Integration, Test-Strategie
@@ -632,7 +632,7 @@ Alle KursService Tests sollten GRÜN sein! 🎉
 
 #### 2. Bestehende Tests verstehen (1 Stunde)
 - [ ] Öffne `src/test/java/de/dwpbank/mikrobank/HandelsRoboterTest.java`
-- [ ] Es gibt schon 20+ Tests geschrieben!
+- [ ] Es gibt schon 19 Tests geschrieben!
 - [ ] Lese folgende Test-Kategorien:
   - **Teil 1:** Grundlegende Tests (Name, Kapital, Depot)
   - **Teil 2:** Kauf-Tests
@@ -682,7 +682,7 @@ Alle Methoden im HandelsRoboter haben "TODO: Implementiere..." Kommentare.
 ### ✅ Checkpoint
 
 - [ ] HandelsRoboter.java existiert und wird verstanden
-- [ ] HandelsRoboterTest.java existiert mit 20+ Tests
+- [ ] HandelsRoboterTest.java existiert mit 19 Tests
 - [ ] Tests laufen (viele schlagen fehl, das ist ok!)
 - [ ] Du weißt in welcher Reihenfolge du implementieren wirst
 
@@ -1193,7 +1193,7 @@ void integrationTest() {
 Schreib eine Datei `WOCHE2_ZUSAMMENFASSUNG.md`:
 
 ```markdown
-# Woche 2: Börsen-Roboter & Testing
+# Woche 2: HandelsRoboter & Testing
 
 ## Was habe ich gelernt?
 
@@ -1231,9 +1231,9 @@ Schreib eine Datei `WOCHE2_ZUSAMMENFASSUNG.md`:
 
 ## Test-Statistik
 
-- Woche 1: 51 Tests
-- Woche 2: 20+ HandelsRoboter Tests
-- **Total: 70+ Tests - ALLE GRÜN!** 🎉
+- Woche 1: 99 Tests
+- Woche 2: 19 HandelsRoboter-Tests
+- **Total: 118 Tests - ALLE GRÜN!** 🎉
 
 ## Highlights
 
@@ -1286,7 +1286,7 @@ GEWINN: +2.500€! 📈
 ```
 
 **Folie 5: Test-Strategie**
-- 20+ Unit Tests geschrieben
+- 19 Unit Tests geschrieben
 - TDD Ansatz
 - Alle Tests grün ✅
 
@@ -1307,11 +1307,11 @@ GEWINN: +2.500€! 📈
 - [ ] PreisService: ermittleAktuellenPreis() ✅
 - [ ] OrderValidierungsService: validiereKauf() & validiereVerkauf() ✅
 - [ ] BoerseService: kaufe() ✅
-- [ ] Alle 51 Tests grün ✅
+- [ ] Alle 99 Tests grün ✅
 
 ## Woche 2
-- [ ] BörsenRoboter-Tests geschrieben ✅
-- [ ] BörsenRoboter implementiert ✅
+- [ ] HandelsRoboter-Tests geschrieben ✅
+- [ ] HandelsRoboter implementiert ✅
 - [ ] Code-Review durchgeführt ✅
 - [ ] Edge Cases getestet ✅
 - [ ] Dokumentation vollständig ✅
