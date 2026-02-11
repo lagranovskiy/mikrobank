@@ -158,6 +158,16 @@ public class HandelsRoboter {
         return null;
     }
 
+
+    /**
+     * Test-Hook für Unit-Tests im gleichen Package.
+     * <p>
+     * So können Tests Referenzkurse setzen, ohne Reflection verwenden zu müssen.
+     */
+    KursService gibKursServiceFuerTests() {
+        return kursService;
+    }
+
     /**
      * Prüft ob der Roboter eine bestimmte Aktie besitzt
      *
@@ -246,6 +256,9 @@ public class HandelsRoboter {
         }
 
         // SCHRITT 2: Analysiere den Kurs
+        // WICHTIG: Beim ersten Auftreten einer Aktie kann die Kurshistorie leer sein.
+        // Dann sind istKursGuenstig()/istKursTeuer() meist false (kein Referenzwert).
+        // Tipp: Bei leerer Historie zuerst kursService.speichereKurs(aktie) als Referenz setzen und HALTEN.
         // - kursService.istKursGuenstig(aktie) → boolean für KAUF
         // - kursService.istKursTeuer(aktie) → boolean für VERKAUF
         // - depot.containsKey(aktie.getName()) → habe ich diese Aktie?

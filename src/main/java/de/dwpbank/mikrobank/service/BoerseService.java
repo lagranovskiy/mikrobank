@@ -14,8 +14,8 @@ public class BoerseService {
 
      /**
      * Der KursService verwaltet die Kurshistorie aller Aktien und stellt Analysefunktionen
-     * zur Verfügung. Der BörsenRoboter nutzt diesen Service später, um Kauf- und Verkaufsentscheidungen
-     * zu treffen basierend auf historischen Kursdaten.
+     * zur Verfügung. Der HandelsRoboter nutzt diesen Service später, um Kauf- und Verkaufsentscheidungen
+     * auf Basis historischer Kursdaten zu treffen.
      */
     private final KursService kursService = new KursService();
 
