@@ -44,6 +44,18 @@ class HandelsRoboterTest {
         bmwAktie = new Aktie("BMW", 50);
     }
 
+
+    /**
+     * Initialisiert für eine Aktie einen Referenzkurs im internen KursService des Roboters.
+     * Dadurch können die Tests gezielt "günstig"/"teuer" prüfen, ohne mehrere Kauf-/Verkaufsversuche.
+     */
+    private void initialisiereReferenzkurs(HandelsRoboter zielRoboter, Aktie aktie, double referenzPreis) {
+        double alterPreis = aktie.getPreis();
+        aktie.setPreis(referenzPreis);
+        zielRoboter.gibKursServiceFuerTests().speichereKurs(aktie);
+        aktie.setPreis(alterPreis);
+    }
+
     // ═══════════════════════════════════════════════════════════════
     // TEIL 1: GRUNDLEGENDE TESTS
     // ═══════════════════════════════════════════════════════════════
@@ -109,6 +121,7 @@ class HandelsRoboterTest {
         // Apple kostet 100€, Roboter hat 10.000€
         // Nach Kauf sollte er weniger Guthaben haben
         double guthabenVorher = roboter.getKonto().getKontostand();
+        initialisiereReferenzkurs(roboter, appleAktie, 120); // 100 ist dann günstig
 
         // Act
         roboter.handleAnEinemTag(appleAktie);
@@ -122,7 +135,10 @@ class HandelsRoboterTest {
     @Test
     @DisplayName("HandelsRoboter: Speichert gekaufte Aktien im Depot")
     void speichertGekauffteAktienImDepot() {
-        // Arrange & Act
+        // Arrange
+        initialisiereReferenzkurs(roboter, appleAktie, 120);
+
+        // Act
         roboter.handleAnEinemTag(appleAktie);
 
         // Assert
@@ -135,7 +151,10 @@ class HandelsRoboterTest {
     @Test
     @DisplayName("HandelsRoboter: Kauft nicht mehr als 10 pro Aktie")
     void kauftMaximal10ProAktie() {
-        // Arrange & Act
+        // Arrange
+        initialisiereReferenzkurs(roboter, appleAktie, 120);
+
+        // Act
         roboter.handleAnEinemTag(appleAktie);
 
         // Assert
@@ -155,6 +174,7 @@ class HandelsRoboterTest {
         // Act & Assert
         // Der Roboter sollte nicht kaufen können
         double guthabenVorher = armerRoboter.getKonto().getKontostand();
+        initialisiereReferenzkurs(armerRoboter, teureAktie, 600); // 500 wäre dann günstig, aber Geld reicht nicht
         armerRoboter.handleAnEinemTag(teureAktie);
         double guthabenNachher = armerRoboter.getKonto().getKontostand();
 
@@ -171,8 +191,9 @@ class HandelsRoboterTest {
     void verkauffAktienWennTeuer() {
         // Arrange
         // 1. Kaufe zuerst eine Aktie (so dass sie im Depot ist)
+        initialisiereReferenzkurs(roboter, appleAktie, 120); // 100 ist günstig
         roboter.handleAnEinemTag(appleAktie);
-        int anzahlNachKauf = roboter.gibAnzahlAktien("Apple");
+        assertTrue(roboter.gibAnzahlAktien("Apple") > 0, "Vor Verkauf muss die Aktie im Depot sein");
 
         // 2. Erhöhe den Preis künstlich (damit der Roboter verkauft)
         appleAktie.setPreis(200); // Preis verdoppelt → teuer!
@@ -192,6 +213,7 @@ class HandelsRoboterTest {
     @DisplayName("HandelsRoboter: Entfernt Aktien aus Depot nach Verkauf")
     void entferntAktienAusDepotNachVerkauf() {
         // Arrange
+        initialisiereReferenzkurs(roboter, appleAktie, 120);
         roboter.handleAnEinemTag(appleAktie);
         assertTrue(roboter.besitztAktie("Apple"));
 
@@ -210,6 +232,7 @@ class HandelsRoboterTest {
     @DisplayName("HandelsRoboter: Verkauft nicht, wenn nicht im Depot")
     void verkauffNichtWennNichtImDepot() {
         // Arrange
+        initialisiereReferenzkurs(roboter, appleAktie, 100);
         appleAktie.setPreis(500); // Sehr teuer
         double guthabenVorher = roboter.getKonto().getKontostand();
 
@@ -280,6 +303,7 @@ class HandelsRoboterTest {
     void vermoegensErhoehtSichDurchGewinn() {
         // Arrange
         double vermoegensVorher = roboter.berechnetGesamtvermoegen();
+        initialisiereReferenzkurs(roboter, appleAktie, 120);
 
         // Act - Kauf und Verkauf mit Gewinn
         // 1. Kaufe bei 100€
@@ -298,7 +322,10 @@ class HandelsRoboterTest {
     @Test
     @DisplayName("HandelsRoboter: Status-Bericht enthält relevante Informationen")
     void statusBerichenthaltRelevante() {
-        // Arrange & Act
+        // Arrange
+        initialisiereReferenzkurs(roboter, appleAktie, 120);
+
+        // Act
         roboter.handleAnEinemTag(appleAktie);
         String status = roboter.gibStatus();
 

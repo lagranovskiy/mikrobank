@@ -747,6 +747,15 @@ public void handleAnEinemTag(Aktie aktie) {
     log.debug("[{}] Analysiere Aktie: {}", name, aktienname);
 
     // SCHRITT 2: Hole Kursinformationen
+    // WICHTIG: Ohne Referenzkurs (erste Runde) sind beide Signale oft false.
+    // Wenn gibKurshistorie(aktienname).isEmpty() ist, speichere zuerst den aktuellen Kurs
+    // als Basis und mache in dieser Runde noch keinen Trade.
+    if (kursService.gibKurshistorie(aktienname).isEmpty()) {
+        kursService.speichereKurs(aktie);
+        log.debug("[{}] Referenzkurs initialisiert für {}", name, aktienname);
+        return;
+    }
+
     boolean istGuenstig = kursService.istKursGuenstig(aktie);
     boolean istTeuer = kursService.istKursTeuer(aktie);
 
@@ -805,6 +814,11 @@ Implementiere die Stubs für:
 
 > **"Wie nutze ich KursService?"**
 > ```java
+> // Erst Referenzkurs setzen, falls noch keine Historie existiert
+> if (kursService.gibKurshistorie(aktie.getName()).isEmpty()) {
+>     kursService.speichereKurs(aktie);
+> }
+>
 > kursService.istKursGuenstig(aktie)  // boolean
 > kursService.istKursTeuer(aktie)     // boolean
 > ```
